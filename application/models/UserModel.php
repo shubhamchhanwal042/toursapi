@@ -9,53 +9,55 @@ class UserModel extends CI_Model
         $this->load->database();
     }
 
-    function createUser($data)
+    function bookPackage()
     {
-       return $this->db->insert("user",$data);
+        return $this->db->insert("package_bookings");
     }
 
-    function getData()
+    function registerUser($data)
     {
-        $data=$this->db->get("user")->result_array();
-        if($data!=null)
-        {
+        return $this->db->insert("users", $data);
+    }
+
+    function getAllUsers()
+    {
+        $data = $this->db->get("users")->result_array();
+        if ($data != null) {
             return $data;
         }
         return null;
     }
 
-    function getDataById($id)
+    function getUserById($id)
     {
-        // $this->db->where("id",$id);
-        // $data=$this->db->get("user")->row_array();
-
-        $data=$this->db->get_where("user",array("id"=>$id))->row_array();
-        if($data!=null)
-        {
+        $data = $this->db->get_where("users", array("id" => $id))->row_array();
+        if ($data != null) {
             return $data;
         }
         return null;
     }
 
 
-    function deleteDataById($id)
+    function deleteUserById($id)
     {
-        $this->db->where("id",$id);
-        return $this->db->delete("user");
+        $this->db->where("id", $id);
+        return $this->db->delete("users");
     }
 
-    function updateData($id,$toupdatdata)
-        {
-            $this->db->where("id",$id);
-            $this->db->update("user",$toupdatdata);
-        }
+    function updateUser($id, $toupdatdata)
+    {
+        $this->db->where("id", $id);
+        return $this->db->update("users", $toupdatdata);
+    }
 
-    function updateSpecificData($id,$name)
-        {
-            $this->db->set("name","Shubham");
-            $this->db->where("id",1);
-            $this->db->update("user");
-        }
 
+    function getStudentByEmail($email)
+    {
+        $data = $this->db->get_where("users", array("email" => $email))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
 
 }
