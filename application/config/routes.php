@@ -61,84 +61,84 @@ $route['blog/read_more/(:num)'] = 'blog/read_more/$1';
 
 // ---------------------------PACKAGES SECTION -------------------------------------
 
-$route['admin/addpackage'] = 'packagescontroller/AddPackages';
-$route['admin/getpackages'] = 'packagescontroller/GetAllPackages';
-$route['admin/updatepackage/(:num)'] = 'packagescontroller/UpdatePackages/$1';
-$route['admin/getpackagebyid/(:num)'] = 'packagescontroller/GetAllPackagesById/$1';
-$route['admin/deletepackage/(:num)'] = 'packagescontroller/DeletePackages/$1';
+$route['admin/addpackage'] = 'PackagesController/AddPackages';
+$route['admin/getpackages'] = 'PackagesController/GetAllPackages';
+$route['admin/updatepackage/(:num)'] = 'PackagesController/UpdatePackages/$1';
+$route['admin/getpackagebyid/(:num)'] = 'PackagesController/GetAllPackagesById/$1';
+$route['admin/deletepackage/(:num)'] = 'PackagesController/DeletePackages/$1';
 
 
 // ---------------------------BOOKING SECTION -------------------------------------
-$route['admin/addbooking'] = 'packagescontroller/AddBookings';
-$route['admin/getbooking'] = 'packagescontroller/GetAllBooking';
-$route['admin/updatebooking/(:num)'] = 'packagescontroller/UpdateBooking/$1';
-$route['admin/getbookingbyid/(:num)'] = 'packagescontroller/GetAllBookingById/$1';
-$route['admin/deletebooking/(:num)'] = 'packagescontroller/DeleteBooking/$1';
+$route['admin/addbooking'] = 'PackagesController/AddBookings';
+$route['admin/getbooking'] = 'PackagesController/GetAllBooking';
+$route['admin/updatebooking/(:num)'] = 'PackagesController/UpdateBooking/$1';
+$route['admin/getbookingbyid/(:num)'] = 'PackagesController/GetAllBookingById/$1';
+$route['admin/deletebooking/(:num)'] = 'PackagesController/DeleteBooking/$1';
 
 
 // ---------------------------INQUIRES SECTION -------------------------------------
-$route['admin/addinquires'] = 'packagescontroller/AddInquires';
-$route['admin/getinquires'] = 'packagescontroller/GetAllInquires';
-$route['admin/updateinquires/(:num)'] = 'packagescontroller/UpdateInquires/$1';
-$route['admin/getinquiresbyid/(:num)'] = 'packagescontroller/GetAllInquiresById/$1';
-$route['admin/deleteinquires/(:num)'] = 'packagescontroller/DeleteInquires/$1';
+$route['admin/addinquires'] = 'PackagesController/AddInquires';
+$route['admin/getinquires'] = 'PackagesController/GetAllInquires';
+$route['admin/updateinquires/(:num)'] = 'PackagesController/UpdateInquires/$1';
+$route['admin/getinquiresbyid/(:num)'] = 'PackagesController/GetAllInquiresById/$1';
+$route['admin/deleteinquires/(:num)'] = 'PackagesController/DeleteInquires/$1';
 
 // ---------------------------SERVICES SECTION -------------------------------------
-$route['admin/addservices'] = 'packagescontroller/AddServices';
-$route['admin/getservices'] = 'packagescontroller/GetAllServices';
-$route['admin/updateservices/(:num)'] = 'packagescontroller/UpdateServices/$1';
-$route['admin/getservicesbyid/(:num)'] = 'packagescontroller/GetAllServicesById/$1';
-$route['admin/deleteservices/(:num)'] = 'packagescontroller/DeleteServices/$1';
+$route['admin/addservices'] = 'PackagesController/AddServices';
+$route['admin/getservices'] = 'PackagesController/GetAllServices';
+$route['admin/updateservices/(:num)'] = 'PackagesController/UpdateServices/$1';
+$route['admin/getservicesbyid/(:num)'] = 'PackagesController/GetAllServicesById/$1';
+$route['admin/deleteservices/(:num)'] = 'PackagesController/DeleteServices/$1';
 
 // ---------------------------CURRENCY SECTION -------------------------------------
-$route['admin/addcurrency'] = 'packagescontroller/AddCurrency';
-$route['admin/getcurrency'] = 'packagescontroller/GetAllCurrency';
-$route['admin/updatecurrency/(:num)'] = 'packagescontroller/UpdateCurrency/$1';
-$route['admin/getcurrencybyid/(:num)'] = 'packagescontroller/GetAllCurrencyById/$1';
-$route['admin/deletecurrency/(:num)'] = 'packagescontroller/DeleteCurrency/$1';
+$route['admin/addcurrency'] = 'PackagesController/AddCurrency';
+$route['admin/getcurrency'] = 'PackagesController/GetAllCurrency';
+$route['admin/updatecurrency/(:num)'] = 'PackagesController/UpdateCurrency/$1';
+$route['admin/getcurrencybyid/(:num)'] = 'PackagesController/GetAllCurrencyById/$1';
+$route['admin/deletecurrency/(:num)'] = 'PackagesController/DeleteCurrency/$1';
 
 // ---------------------------BUS SECTION -------------------------------------
-$route['admin/addbus'] = 'packagescontroller/AddBus';
-$route['admin/getbus'] = 'packagescontroller/GetAllBus';
-$route['admin/updatebus/(:num)'] = 'packagescontroller/UpdateBus/$1';
-$route['admin/getbusbyid/(:num)'] = 'packagescontroller/GetAllBusById/$1';
-$route['admin/deletebus/(:num)'] = 'packagescontroller/DeleteBus/$1';
+$route['admin/addbus'] = 'PackagesController/AddBus';
+$route['admin/getbus'] = 'PackagesController/GetAllBus';
+$route['admin/updatebus/(:num)'] = 'PackagesController/UpdateBus/$1';
+$route['admin/getbusbyid/(:num)'] = 'PackagesController/GetAllBusById/$1';
+$route['admin/deletebus/(:num)'] = 'PackagesController/DeleteBus/$1';
 
 // ---------------------------HOTEL SECTION -------------------------------------
-$route['admin/addhotel'] = 'packagescontroller/AddHotel';
-$route['admin/gethotel'] = 'packagescontroller/GetAllHotel';
-$route['admin/updatehotel/(:num)'] = 'packagescontroller/UpdateHotel/$1';
-$route['admin/gethotelbyid/(:num)'] = 'packagescontroller/GetAllHotelById/$1';
-$route['admin/deletehotel/(:num)'] = 'packagescontroller/DeleteHotel/$1';
+$route['admin/addhotel'] = 'PackagesController/AddHotel';
+$route['admin/gethotel'] = 'PackagesController/GetAllHotel';
+$route['admin/updatehotel/(:num)'] = 'PackagesController/UpdateHotel/$1';
+$route['admin/gethotelbyid/(:num)'] = 'PackagesController/GetAllHotelById/$1';
+$route['admin/deletehotel/(:num)'] = 'PackagesController/DeleteHotel/$1';
 
 
 
 
 // ------------------------------------------- USER SIDE ROUTES-----------------------------
 // ---------------------------TO CHANGE BOOKING STATUS -------------------------------------
-$route['admin/bookpackage'] = 'packagescontroller/AddPackage_Bookings';
-$route['admin/changebookingstatus/(:any)/(:any)'] = 'packagescontroller/ChangeBookingStatus/$1/$2';
+$route['admin/bookpackage'] = 'PackagesController/AddPackage_Bookings';
+$route['admin/changebookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeBookingStatus/$1/$2';
 
 // ----------------------------------------BUS BOOKING ROUTES----------------------------
 
 // -------------------------------------TO CHANGE BUS BOOKING STATUS----------------------------
-$route['admin/bookbus'] = 'packagescontroller/AddBus_Bookings';
-$route['admin/busbookingstatus/(:any)/(:any)'] = 'packagescontroller/ChangeBusStatus/$1/$2';
+$route['admin/bookbus'] = 'PackagesController/AddBus_Bookings';
+$route['admin/busbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeBusStatus/$1/$2';
 
 // -------------------------------------TO CHANGE CAB BOOKING STATUS----------------------------
-$route['admin/bookcap'] = 'packagescontroller/AddCab_Bookings';
-$route['admin/capbookingstatus/(:any)/(:any)'] = 'packagescontroller/ChangeCapStatus/$1/$2';
+$route['admin/bookcap'] = 'PackagesController/AddCab_Bookings';
+$route['admin/capbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeCapStatus/$1/$2';
 
 // -------------------------------------TO CHANGE HOTEL BOOKING STATUS----------------------------
-$route['admin/bookcap'] = 'packagescontroller/AddHotel_Bookings';
-$route['admin/hotelbookingstatus/(:any)/(:any)'] = 'packagescontroller/ChangeHotelStatus/$1/$2';
+$route['admin/bookcap'] = 'PackagesController/AddHotel_Bookings';
+$route['admin/hotelbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeHotelStatus/$1/$2';
 
 // --------------------------------------------ROUTES TO GET THE COUNTS ON DASHBOARD---------------------------------
-$route['admin/dashboardcounts'] = 'packagescontroller/GetAllCounts';
+$route['admin/dashboardcounts'] = 'PackagesController/GetAllCounts';
 
 // ----------------------------------------- ROUTES TO GET ALL USERS---------------------------------------------------
-$route['admin/getusers'] = 'packagescontroller/GetAllUsers';
-$route['admin/userstatus/(:any)/(:any)'] = 'packagescontroller/ChangeUserStatus/$1/$2';
+$route['admin/getusers'] = 'PackagesController/GetAllUsers';
+$route['admin/userstatus/(:any)/(:any)'] = 'PackagesController/ChangeUserStatus/$1/$2';
 
 
 // ------------------------------------------- USER CONTROLLER ROUTS-------------------------------------------------
@@ -151,3 +151,10 @@ $route['user/addpackage'] = 'UserController/PackageBookings';
 $route['signup'] = 'Main/Signup';
 $route['AdminLogin'] = 'Main/AdminLogin';
 
+// -------------------------------------------------BANNER ROUTES PACKAGES CONTROLLER--------------
+
+$route['banner'] = 'PackagesController/AddBanner';
+$route['admin/getbanner'] = 'PackagesController/GetAllBanner';
+$route['admin/updatebanner/(:num)'] = 'PackagesController/UpdateBanner/$1';
+$route['admin/getbannerbyid/(:num)'] = 'PackagesController/GetAllBannerById/$1';
+$route['admin/deletebanner/(:num)'] = 'PackagesController/DeleteBanner/$1';

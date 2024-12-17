@@ -9,10 +9,6 @@ class UserController extends CI_Controller
         parent::__construct();
         $this->load->model("UserModel");
     }
-
-
-
-
 // -----------------------------------------------USER BOOKINGS APIS--------------------------------------
 
 function AddBusBookings(){

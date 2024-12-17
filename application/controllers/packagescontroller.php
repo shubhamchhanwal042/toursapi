@@ -1,14 +1,15 @@
 <?php
 defined("BASEPATH") or exit("No Direct Script Access Aloowed");
 
-class packagescontroller extends CI_Controller
+class PackagesController extends CI_Controller
 {
     function __construct()
     {
         parent::__construct();
-        $this->load->model("packages_api_model");
+        $this->load->model("Packages_Api_Model");
         $this->load->library("session");
     }
+
     function AddPackages() {
         // Check if the request method is POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -92,7 +93,7 @@ class packagescontroller extends CI_Controller
                 }
                 
                 // Call the model function to add the package with images
-                $result = $this->packages_api_model->AddPackages($formdata);
+                $result = $this->Packages_Api_Model->AddPackages($formdata);
                 
                 if ($result) {
                     $this->output->set_status_header(200);  // Success
@@ -123,7 +124,7 @@ class packagescontroller extends CI_Controller
     function GetAllPackages()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $events = $this->packages_api_model->GetAllPackages();
+            $events = $this->Packages_Api_Model->GetAllPackages();
             if ($events!=null) {
                 $this->output->set_status_header(200);
                 $response = array("status" => "success", "data" => $events, "message" => "Packages Fetched Successfully");
@@ -143,7 +144,7 @@ class packagescontroller extends CI_Controller
     function GetAllPackagesById($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $events = $this->packages_api_model->GetAllPackagesById($id );
+            $events = $this->Packages_Api_Model->GetAllPackagesById($id );
             if ($events!=null) {
                 $this->output->set_status_header(200);
                 $response = array("status" => "success", "data" => $events, "message" => "Packages Fetched Successfully");
@@ -165,7 +166,7 @@ class packagescontroller extends CI_Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Get the existing package details by ID
-            $event = $this->packages_api_model->GetAllPackagesById($id);
+            $event = $this->Packages_Api_Model->GetAllPackagesById($id);
     
             if ($event != null) {
                 // Fetch the data sent from the client
@@ -251,7 +252,7 @@ class packagescontroller extends CI_Controller
                 }
     
                 // Update the package in the database
-                $result = $this->packages_api_model->UpdatePackages($id, $formdata);
+                $result = $this->Packages_Api_Model->UpdatePackages($id, $formdata);
     
                 if ($result == true) {
                     $this->output->set_status_header(200);
@@ -280,11 +281,11 @@ class packagescontroller extends CI_Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllPackagesById($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllPackagesById($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeletePackages($id);
+                $result = $this->Packages_Api_Model->DeletePackages($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Package Deleted Successfully");
@@ -314,7 +315,7 @@ class packagescontroller extends CI_Controller
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $formdata = $this->input->post();
-            $result = $this->packages_api_model->AddBookings($formdata);
+            $result = $this->Packages_Api_Model->AddBookings($formdata);
             if($result == true){
                 $this->output->set_status_header(200);
                 $response = array("status" => "success", "message" => "Booking Data Added Successfully");
@@ -328,11 +329,11 @@ class packagescontroller extends CI_Controller
 
     function UpdateBooking($id){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $result = $this->packages_api_model->GetAllBookingsById($id);
+            $result = $this->Packages_Api_Model->GetAllBookingsById($id);
 
             if ($result != null) {
                 $formdata = $this->input->post();
-                $result = $this->packages_api_model->UpdateBooking($id,$formdata);
+                $result = $this->Packages_Api_Model->UpdateBooking($id,$formdata);
                 if ($result ==true) {
                     $this->output->set_status_header(200 );
                     $response = array("status" => "success", "message" => "Booking Data Updated Successfully");
@@ -358,7 +359,7 @@ class packagescontroller extends CI_Controller
 function GetAllBooking()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllBooking();
+        $events = $this->Packages_Api_Model->GetAllBooking();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Bookings Fetched Successfully");
@@ -378,7 +379,7 @@ function GetAllBooking()
 function GetAllBookingById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllBookingsById($id);
+        $events = $this->Packages_Api_Model->GetAllBookingsById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Bookings Fetched Successfully");
@@ -402,11 +403,11 @@ function GetAllBookingById($id)
         {
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 // Check if the package exists before attempting to delete
-                $package = $this->packages_api_model->GetAllBookingsById($id);  // Assuming you have a method to get the package by ID
+                $package = $this->Packages_Api_Model->GetAllBookingsById($id);  // Assuming you have a method to get the package by ID
         
                 if ($package) {
                     // If package exists, delete it
-                    $result = $this->packages_api_model->DeleteBooking($id);
+                    $result = $this->Packages_Api_Model->DeleteBooking($id);
                     if ($result) {
                         $this->output->set_status_header(200);
                         $response = array("status" => "success", "message" => "Bookings Deleted Successfully");
@@ -438,7 +439,7 @@ function AddInquires(){
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
-        $result = $this->packages_api_model->AddInquires($formdata);
+        $result = $this->Packages_Api_Model->AddInquires($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Inquires Data Added Successfully");
@@ -453,7 +454,7 @@ function AddInquires(){
 function GetAllInquires()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllInquires();
+        $events = $this->Packages_Api_Model->GetAllInquires();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Inquires Fetched Successfully");
@@ -473,7 +474,7 @@ function GetAllInquires()
 function GetAllInquiresById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllInquiresById($id);
+        $events = $this->Packages_Api_Model->GetAllInquiresById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Inquires Fetched Successfully");
@@ -494,11 +495,11 @@ function GetAllInquiresById($id)
 
 function UpdateInquires($id){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $result = $this->packages_api_model->GetAllInquiresById($id);
+        $result = $this->Packages_Api_Model->GetAllInquiresById($id);
 
         if ($result != null) {
             $formdata = $this->input->post();
-            $result = $this->packages_api_model->UpdateInquires($id,$formdata);
+            $result = $this->Packages_Api_Model->UpdateInquires($id,$formdata);
             if ($result ==true) {
                 $this->output->set_status_header(200 );
                 $response = array("status" => "success", "message" => "Inquires Data Updated Successfully");
@@ -524,11 +525,11 @@ function DeleteInquires($id){
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllInquires($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllInquires($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeleteInquires($id);
+                $result = $this->Packages_Api_Model->DeleteInquires($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Inquires Deleted Successfully");
@@ -562,7 +563,7 @@ function AddServices(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddServices($formdata);
+        $result = $this->Packages_Api_Model->AddServices($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Services Data Added Successfully");
@@ -577,7 +578,7 @@ function AddServices(){
 function GetAllServices()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllServices();
+        $events = $this->Packages_Api_Model->GetAllServices();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Services Fetched Successfully");
@@ -598,7 +599,7 @@ function GetAllServices()
 function GetAllServicesById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllServicesById($id);
+        $events = $this->Packages_Api_Model->GetAllServicesById($id);
         if ($events!=null) {
             // print_r($events);die;
 
@@ -623,11 +624,11 @@ function GetAllServicesById($id)
 
 function UpdateServices($id){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $result = $this->packages_api_model->GetAllServicesById($id);
+        $result = $this->Packages_Api_Model->GetAllServicesById($id);
 
         if ($result != null) {
             $formdata = $this->input->post();
-            $result = $this->packages_api_model->UpdateServices($id,$formdata);
+            $result = $this->Packages_Api_Model->UpdateServices($id,$formdata);
             if ($result ==true) {
                 $this->output->set_status_header(200 );
                 $response = array("status" => "success", "message" => "Services Data Updated Successfully");
@@ -653,11 +654,11 @@ function DeleteServices($id){
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllServicesById($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllServicesById($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeleteServices($id);
+                $result = $this->Packages_Api_Model->DeleteServices($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Services Deleted Successfully");
@@ -690,7 +691,7 @@ function AddCurrency(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddCurrency($formdata);
+        $result = $this->Packages_Api_Model->AddCurrency($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Currency Data Added Successfully");
@@ -705,7 +706,7 @@ function AddCurrency(){
 function GetAllCurrency()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllCurrency();
+        $events = $this->Packages_Api_Model->GetAllCurrency();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Currency Fetched Successfully");
@@ -725,7 +726,7 @@ function GetAllCurrency()
 function GetAllCurrencyById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllCurrencyById($id);
+        $events = $this->Packages_Api_Model->GetAllCurrencyById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Currency Fetched Successfully");
@@ -746,11 +747,11 @@ function GetAllCurrencyById($id)
 
 function UpdateCurrency($id){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $result = $this->packages_api_model->GetAllCurrencyById($id);
+        $result = $this->Packages_Api_Model->GetAllCurrencyById($id);
 
         if ($result != null) {
             $formdata = $this->input->post();
-            $result = $this->packages_api_model->UpdateCurrency($id,$formdata);
+            $result = $this->Packages_Api_Model->UpdateCurrency($id,$formdata);
             if ($result ==true) {
                 $this->output->set_status_header(200 );
                 $response = array("status" => "success", "message" => "Currency Data Updated Successfully");
@@ -776,11 +777,11 @@ function DeleteCurrency($id){
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllCurrencyById($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllCurrencyById($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeleteCurrency($id);
+                $result = $this->Packages_Api_Model->DeleteCurrency($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Currency Deleted Successfully");
@@ -865,7 +866,7 @@ function AddBus() {
             }
             
             // Call the model function to add the package with images
-            $result = $this->packages_api_model->AddBus($formdata);
+            $result = $this->Packages_Api_Model->AddBus($formdata);
             
             if ($result) {
                 $this->output->set_status_header(200);  // Success
@@ -891,10 +892,11 @@ function AddBus() {
 }
 
 
+
 function GetAllBus()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllBus();
+        $events = $this->Packages_Api_Model->GetAllBus();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Bus Fetched Successfully");
@@ -914,7 +916,7 @@ function GetAllBus()
 function GetAllBusById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllBusById($id);
+        $events = $this->Packages_Api_Model->GetAllBusById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Bus Fetched Successfully");
@@ -935,7 +937,7 @@ function GetAllBusById($id)
 
 function UpdateBus($id){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $result = $this->packages_api_model->GetAllBusById($id);
+        $result = $this->Packages_Api_Model->GetAllBusById($id);
 
         if ($result != null) {
             $formdata = $this->input->post();
@@ -990,7 +992,7 @@ function UpdateBus($id){
 
 
 
-            $result = $this->packages_api_model->UpdateBus($id,$formdata);
+            $result = $this->Packages_Api_Model->UpdateBus($id,$formdata);
             if ($result ==true) {
                 $this->output->set_status_header(200 );
                 $response = array("status" => "success", "message" => "Bus Data Updated Successfully");
@@ -1016,11 +1018,11 @@ function DeleteBus($id){
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllBusById($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllBusById($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeleteBus($id);
+                $result = $this->Packages_Api_Model->DeleteBus($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Bus Deleted Successfully");
@@ -1102,7 +1104,7 @@ function AddHotel() {
             }
             
             // Call the model function to add the package with images
-            $result = $this->packages_api_model->AddHotel($formdata);
+            $result = $this->Packages_Api_Model->AddHotel($formdata);
             
             if ($result) {
                 $this->output->set_status_header(200);  // Success
@@ -1131,7 +1133,7 @@ function AddHotel() {
 function GetAllHotel()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllHotel();
+        $events = $this->Packages_Api_Model->GetAllHotel();
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Hotel Fetched Successfully");
@@ -1152,7 +1154,7 @@ function GetAllHotel()
 function GetAllHotelById($id)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->packages_api_model->GetAllHotelById($id);
+        $events = $this->Packages_Api_Model->GetAllHotelById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Hotel Fetched Successfully");
@@ -1173,7 +1175,7 @@ function GetAllHotelById($id)
 
 function UpdateHotel($id){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $result = $this->packages_api_model->GetAllHotelById($id);
+        $result = $this->Packages_Api_Model->GetAllHotelById($id);
 
         if ($result != null) {
             $formdata = $this->input->post();
@@ -1228,7 +1230,7 @@ function UpdateHotel($id){
 
 
 
-            $result = $this->packages_api_model->UpdateHotel($id,$formdata);
+            $result = $this->Packages_Api_Model->UpdateHotel($id,$formdata);
             if ($result ==true) {
                 $this->output->set_status_header(200 );
                 $response = array("status" => "success", "message" => "Hotel Data Updated Successfully");
@@ -1254,11 +1256,11 @@ function DeleteHotel($id){
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Check if the package exists before attempting to delete
-            $package = $this->packages_api_model->GetAllHotelById($id);  // Assuming you have a method to get the package by ID
+            $package = $this->Packages_Api_Model->GetAllHotelById($id);  // Assuming you have a method to get the package by ID
     
             if ($package) {
                 // If package exists, delete it
-                $result = $this->packages_api_model->DeleteHotel($id);
+                $result = $this->Packages_Api_Model->DeleteHotel($id);
                 if ($result) {
                     $this->output->set_status_header(200);
                     $response = array("status" => "success", "message" => "Hotel Deleted Successfully");
@@ -1291,7 +1293,7 @@ function ChangeBookingStatus($id,$status)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // print_r($status);die;
-        $Data = $this->packages_api_model->ChangeBookingStatus($id,$status);
+        $Data = $this->Packages_Api_Model->ChangeBookingStatus($id,$status);
         if ($Data==true) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $Data, "message" => "BOOKING Status Updated Successfully");
@@ -1314,7 +1316,7 @@ function AddPackage_Bookings(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddPackage_Bookings($formdata);
+        $result = $this->Packages_Api_Model->AddPackage_Bookings($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Package_Bookings Data Added Successfully");
@@ -1335,7 +1337,7 @@ function AddPackage_Bookings(){
 function ChangeBusStatus($id,$status)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Data = $this->packages_api_model->ChangeBusStatus($id,$status);
+        $Data = $this->Packages_Api_Model->ChangeBusStatus($id,$status);
         if ($Data==true) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $Data, "message" => "BOOKING Status Updated Successfully");
@@ -1358,7 +1360,7 @@ function AddBus_Bookings(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddBus_Bookings($formdata);
+        $result = $this->Packages_Api_Model->AddBus_Bookings($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Bus_Bookings Data Added Successfully");
@@ -1376,7 +1378,7 @@ function AddBus_Bookings(){
 function ChangeCapStatus($id,$status)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Data = $this->packages_api_model->ChangeCapStatus($id,$status);
+        $Data = $this->Packages_Api_Model->ChangeCapStatus($id,$status);
         if ($Data==true) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $Data, "message" => "Cab_Bookings Status Updated Successfully");
@@ -1399,7 +1401,7 @@ function AddCab_Bookings(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddCab_Bookings($formdata);
+        $result = $this->Packages_Api_Model->AddCab_Bookings($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Cab_Bookings Data Added Successfully");
@@ -1415,7 +1417,7 @@ function AddCab_Bookings(){
 function ChangeHotelStatus($id,$status)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Data = $this->packages_api_model->ChangeHotelStatus($id,$status);
+        $Data = $this->Packages_Api_Model->ChangeHotelStatus($id,$status);
         if ($Data==true) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $Data, "message" => "Hotel Status Updated Successfully");
@@ -1438,7 +1440,7 @@ function AddHotel_Bookings(){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->AddHotel_Bookings($formdata);
+        $result = $this->Packages_Api_Model->AddHotel_Bookings($formdata);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "Hotel Data Added Successfully");
@@ -1456,7 +1458,7 @@ function AddHotel_Bookings(){
 function GetAllCounts()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $counts = $this->packages_api_model->GetAllCounts();
+        $counts = $this->Packages_Api_Model->GetAllCounts();
         if ($counts!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $counts, "message" => "Bus Fetched Successfully");
@@ -1477,7 +1479,7 @@ function GetAllCounts()
 function GetAllUsers()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $user = $this->packages_api_model->GetAllUsers();
+        $user = $this->Packages_Api_Model->GetAllUsers();
         if ($user!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $user, "message" => "User Fetched Successfully");
@@ -1502,7 +1504,7 @@ function ChangeUserStatus($id,$status){
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
-        $result = $this->packages_api_model->ChangeUserStatus($id,$status);
+        $result = $this->Packages_Api_Model->ChangeUserStatus($id,$status);
         if($result == true){
             $this->output->set_status_header(200);
             $response = array("status" => "success", "message" => "account_status Data Added Successfully");
@@ -1515,4 +1517,242 @@ function ChangeUserStatus($id,$status){
 }
 
 
+
+
+// -------------------------------------------BANNER APIS--------------------------------------------
+    function AddBanner() {
+        // Check if the request method is POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $formdata = $this->input->post();
+
+            // Upload configuration for both images
+            $config['upload_path'] = 'uploads/Packages/banner/';
+            $config['allowed_types'] = 'gif|jpg|jpeg|png';
+            $config['max_size'] = 102400;  // Max file size in KB (100MB)
+            
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            
+
+            $uploaded_Bus_files = []; // To store the names of successfully uploaded hotel images
+
+            // Handle hotel_image upload (single or multiple)
+            if (!empty($_FILES['photos']['name'][0])) {
+                $files = $_FILES['photos']; // 'hotel_image' is the key you send from Postman
+                
+                for ($i = 0; $i < count($files['name']); $i++) {
+                    // Set the $_FILES global array for the current file
+                    $_FILES['photos']['name'] = $files['name'][$i];
+                    $_FILES['photos']['type'] = $files['type'][$i];
+                    $_FILES['photos']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['photos']['error'] = $files['error'][$i];
+                    $_FILES['photos']['size'] = $files['size'][$i];
+
+                    // Perform the file upload for hotel images
+                    if (!$this->upload->do_upload('photos')) {
+                        $error = $this->upload->display_errors();
+                        log_message('error', 'Hotel Image Upload Error: ' . $error);
+                        $response = array("status" => "error", "message" => "photos image upload error", "error" => $error);
+                        $this->output->set_status_header(400);  // Bad Request
+                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+                        return;
+                    } else {
+                        // Hotel image uploaded successfully
+                        $upload_data = $this->upload->data();
+                        $uploaded_Bus_files[] = $upload_data['file_name'];  // Add the file name to the array
+                    }
+                }
+            }
+
+
+        
+            // If files were uploaded successfully, save the data
+            if (!empty($uploaded_Bus_files)) {
+                // Save the uploaded image file names as comma-separated strings
+                if (!empty($uploaded_Bus_files)) {
+                    $formdata['photos'] = implode(',', $uploaded_Bus_files);  // Save hotel images as comma-separated string
+                }
+                
+                // Call the model function to add the package with images
+                $result = $this->Packages_Api_Model->AddBanner($formdata);
+                
+                if ($result) {
+                    $this->output->set_status_header(200);  // Success
+                    $response = array("status" => "success", "message" => "Bus uploaded successfully", "data" => [
+                        'photos' => $formdata['photos'], 
+                    ]);
+                } else {
+                    $this->output->set_status_header(404);  // Not Found
+                    $response = array("status" => "error", "message" => "Error uploading Bus");
+                }
+            } else {
+                $this->output->set_status_header(400);  // Bad Request
+                $response = array("status" => "error", "message" => "No files uploaded");
+            }
+        } else {
+            // Invalid request method
+            $this->output->set_status_header(405);  // Method Not Allowed
+            $response = array("status" => "error", "message" => "Bad Request");
+        }
+
+        // Set the response to JSON and send it
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+
+    
+function GetAllBanner()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllBanner();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Banner Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Bus Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllBannerById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllBannerById($id);
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Banner Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Banner Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+
+function UpdateBanner($id){
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $result = $this->Packages_Api_Model->GetAllBannerById($id);
+
+        if ($result != null) {
+            $formdata = $this->input->post();
+
+            $config['upload_path'] = 'uploads/Packages/';
+            $config['allowed_types'] = 'gif|jpg|jpeg|png';
+            $config['max_size'] = 102400;  // Max file size (100MB)
+
+            // Load the upload library and initialize
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            // Initialize the arrays to hold new file names
+            $uploaded_photos = [];
+
+            // Handle hotel_image upload (single or multiple)
+            if (!empty($_FILES['photos']['name'][0])) {
+                $files = $_FILES['photos']; // 'hotel_image' is the key you send from Postman
+                
+                for ($i = 0; $i < count($files['name']); $i++) {
+                    // Set the $_FILES global array for the current file
+                    $_FILES['photos']['name'] = $files['name'][$i];
+                    $_FILES['photos']['type'] = $files['type'][$i];
+                    $_FILES['photos']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['photos']['error'] = $files['error'][$i];
+                    $_FILES['photos']['size'] = $files['size'][$i];
+
+                    // Perform the file upload for hotel images
+                    if ($this->upload->do_upload('photos')) {
+                        $upload_data = $this->upload->data();
+                        $uploaded_photos[] = $upload_data['file_name'];  // Add uploaded file name to the array
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->output->set_status_header(400);
+                        $response = array("status" => "error", "message" => "Banner image upload error: " . $error);
+                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+                        return;
+                    }
+                }
+            } else {
+                // If no files are uploaded for hotel_image, keep the old images
+                $uploaded_photos = explode(',', $event['photos']);  // Keep old image(s) if no new image is uploaded
+            }
+
+            
+
+            // Update formdata with the new or old image(s)
+            if (!empty($uploaded_photos)) {
+                $formdata['photos'] = implode(',', $uploaded_photos);  // Store hotel images as comma-separated values
+            }
+           
+
+
+
+            $result = $this->Packages_Api_Model->UpdateBanner($id,$formdata);
+            if ($result ==true) {
+                $this->output->set_status_header(200 );
+                $response = array("status" => "success", "message" => "Banner Data Updated Successfully");
+            } else {
+                $this->output->set_status_header(500);
+                $response = array("status" => "error", "message" => "Some Error Occured While Updating Banner Data");
+            }
+        }
+        else{
+            $this->output->set_status_header(404);
+            $response = array("status" => "error", "message" => "No Banner Found");
+        } 
+    }
+    else {
+        $this->output->set_status_header(405);
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function DeleteBanner($id){
+
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllBannerById($id);  // Assuming you have a method to get the package by ID
+    
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteBanner($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Banner Deleted Successfully");
+                } else {
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Banner");
+                }
+            } else {
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Banner Not Found");
+            }
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
+        }
+    
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+}
+
+}
 ?>

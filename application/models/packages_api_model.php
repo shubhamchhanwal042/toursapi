@@ -1,5 +1,5 @@
 <?php
-class packages_api_model extends CI_Model {
+class Packages_Api_Model extends CI_Model {
 
     public function __construct() {
         $this->load->database();
@@ -427,6 +427,45 @@ function ChangeUserStatus($id,$status){
 
     return false;
 }
+
+
+// --------------------------------------------------------BANNER APIS--------------------------------------
+function AddBanner($formdata){
+    $this->db->insert('banner',$formdata);
+    return true;
+}
+
+function GetAllBannerById($id){
+    $this->db->order_by('id', 'DESC');
+    $data = $this->db->get_where("banner",array("id"=>$id))->result_array();
+    
+    if ($data != null) {
+        return $data;
+    }
+}
+
+function GetAllBanner()
+{
+    $this->db->order_by('id', 'DESC');
+    $data = $this->db->get_where("banner")->result_array();
+    
+    if ($data != null) {
+        return $data;
+    }
+}
+
+
+function UpdateBanner($id,$formdata){
+    $this->db->where('id', $id);
+    $this->db->update('banner', $formdata);
+    return true;
+}
+
+function DeleteBanner($id){
+    $this->db->where("id",$id);
+    return $this->db->delete("banner");
+}
+
 
 }
 ?>
