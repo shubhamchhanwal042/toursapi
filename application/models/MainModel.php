@@ -11,9 +11,8 @@ class MainModel extends CI_Model
 
     function createAdmin()
     {
-        $data=$this->db->get("admin");
-
-        if($data->num_rows >0)
+        $data=$this->db->get("admin")->row_array();
+        if($data!=null)
         {
             return null;
         }
