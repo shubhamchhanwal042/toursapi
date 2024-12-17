@@ -9,6 +9,24 @@ class MainModel extends CI_Model
         $this->load->database();
     }
 
+    function createAdmin()
+    {
+        $data=$this->db->get("admin");
+
+        if($data->num_rows >0)
+        {
+            return null;
+        }
+        else{
+            $password = password_hash("admin", PASSWORD_BCRYPT);
+            $data=array(
+                "email"=>"admin",
+                "password"=>$password,
+            );
+            return $this->db->insert("admin",$data);
+        }
+    }
+
     function registerUser($data)
     {
         return $this->db->insert("users", $data);
@@ -18,7 +36,7 @@ class MainModel extends CI_Model
     {
         $admin = $this->db->get_where('admin',array("email"=>$email))->row_array();
         if ($admin != null) {
-            if (password_verify($password, $admin->password)) {
+            if (password_verify($password, $admin["password"])) {
                 return $admin;
             } else {
                 return false;

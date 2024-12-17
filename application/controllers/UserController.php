@@ -12,149 +12,68 @@ class UserController extends CI_Controller
 
 
 
-    
-// Student Realted Functions
-function GetAllUsers()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Users = $this->UserModel->getAllUsers();
-        if ($Users!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $Users, "message" => "Users Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
 
-            $response = array("status" => "error", "message" => "No Users Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
+// -----------------------------------------------USER BOOKINGS APIS--------------------------------------
 
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
+function AddBusBookings(){
 
-
-function RegisterUser()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
-        $password = $this->MainModel->encryptData($formdata["password"]);
-        $formdata["password"] = $password;
-        $result = $this->UserModel->registerUser($formdata);
-        if ($result!=null) {
-            $this->output->set_status_header(201);
-            $response = array("status" => "success", "message" => "User Registered Successfully");
-        } else {
+        $result = $this->UserModel->AddBusBookings($formdata);
+        if($result == true){
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Bus Booking Data Added Successfully");
+        }else{
             $this->output->set_status_header(500);
-            $response = array("status" => "error", "message" => "Some Error Occured While Registering Student");
+            $response = array("status" => "error", "message" => "Some Error Occurred While Adding Bus Booking Data");
         }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
     }
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
+function AddHotelBookings(){
 
-
-function GetUserByID($id)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Student = $this->UserModel->getStudent($id);
-        if ($Student != null) {
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $formdata = $this->input->post();
+        $result = $this->UserModel->AddHotelBookings($formdata);
+        if($result == true){
             $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $Student, "message" => "Student Data Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-            $response = array("status" => "error", "message" => "No Student Found");
+            $response = array("status" => "success", "message" => "Hotel Booking Data Added Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Adding Hotel Booking Data");
         }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
     }
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
+function AddCabBookings(){
 
-function UpdateUser($id)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $User = $this->UserModel->getUserById($id);
-        if ($User!=null) {
-            $formdata = $this->input->post();
-            if (!empty($formdata["password"])) {
-                $password = $this->MainModel->encryptData($formdata["password"]);
-                $formdata["password"] = $password;
-            }
-            $result = $this->UserModel->updateUser($id, $formdata);
-            if ($result) {
-                $this->output->set_status_header(200);
-                $response = array("status" => "success", "message" => "Student Data Updated Successfully");
-            } else {
-                $this->output->set_status_header(500);
-                $response = array("status" => "error", "message" => "Some Error Occurred While Updating Student Data");
-            }
-        } else {
-            $this->output->set_status_header(404);
-            $response = array("status" => "error", "message" => "User not found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-
-    // Output JSON response
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-
-function DeleteUser($id)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                $User=$this->UserModel->getUserById($id);
-                if($User!=null)
-                {
-                    $result = $this->UserModel->deleteUserById($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "User Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occured While Deleting Student Data");
-                    }
-                }
-                else{
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "No User Found");
-                }
-        }
-        else {
-            $this->output->set_status_header(405);
-            $response = array("status" => "error", "message" => "Bad Request");
-        }
-        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-
-
-function CheckStudentEmailExists()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $email = urldecode($this->input->get("email"));
-        $email = $this->UserModel->getStudentByEmail($email);
-        if ($email != null) {
+    if($_SERVER['REQUEST_METHOD'] =='POST'){
+        $formdata = $this->input->post();
+        $result = $this->UserModel->AddCabBookings($formdata);
+        if($result == true){
             $this->output->set_status_header(200);
-            $response = array("status" => "success", "message" => "Email Found");
-        } else {
-            $this->output->set_status_header(404);
-            $response = array("status" => "error", "message" => "No Data Found");
+            $response = array("status" => "success", "message" => "Cab Booking Data Added Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Adding Cab Booking Data");
         }
-    } else {
-        $this->output->set_status_header(405);
-        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function PackageBookings(){
+    if($_SERVER['REQUEST_METHOD'] =='POST'){
+        $formdata = $this->input->post();
+        $result = $this->UserModel->PackageBookings($formdata);
+        if($result == true){
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Package Booking Data Added Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Adding Package Booking Data");
+        }
     }
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }

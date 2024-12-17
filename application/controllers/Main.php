@@ -8,6 +8,7 @@ class Main extends CI_Controller
     {
         parent::__construct();
         $this->load->model("MainModel");
+        $this->MainModel->createAdmin();
     }
 
 
@@ -39,7 +40,8 @@ class Main extends CI_Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $this->input->post('email');
             $password = $this->input->post('password');
-            $result = $this->UserModel->adminLogin($email, $password);
+            // print_r($email);die;
+            $result = $this->MainModel->adminLogin($email, $password);
             if ($result != null && $result != false) {
                 $this->output->set_status_header(201);
                 $response = array("status" => "success", "message" => "Admin Loggedin Successfully");

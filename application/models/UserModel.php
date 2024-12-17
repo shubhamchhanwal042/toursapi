@@ -60,4 +60,23 @@ class UserModel extends CI_Model
         return null;
     }
 
+    function AddBusBookings($formdata){
+        $this->db->insert('bus_booking',$formdata);
+        return true;
+    }
+    function AddHotelBookings($formdata){
+    $this->db->insert('hotel_bookings',$formdata);
+    return true;
+     }
+
+    function AddCabBookings($formdata){
+        $this->db->insert('cab_booking',$formdata);
+        return true;  
+    }
+
+    function PackageBookings($formdata){
+        $this->db->insert('package_bookings',$formdata);
+        return true;
+    }
+
 }

@@ -140,6 +140,26 @@ class packagescontroller extends CI_Controller
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
+    function GetAllPackagesById($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $events = $this->packages_api_model->GetAllPackagesById($id );
+            if ($events!=null) {
+                $this->output->set_status_header(200);
+                $response = array("status" => "success", "data" => $events, "message" => "Packages Fetched Successfully");
+            } else {
+                $this->output->set_status_header(404);
+
+                $response = array("status" => "error", "message" => "No Packages Found");
+            }
+        } else {
+            $this->output->set_status_header(405);
+
+            $response = array("status" => "error", "message" => "Bad Request");
+        }
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+
 
     public function UpdatePackages($id)
     {
@@ -308,7 +328,7 @@ class packagescontroller extends CI_Controller
 
     function UpdateBooking($id){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $result = $this->packages_api_model->GetAllBookings($id);
+            $result = $this->packages_api_model->GetAllBookingsById($id);
 
             if ($result != null) {
                 $formdata = $this->input->post();
@@ -355,6 +375,26 @@ function GetAllBooking()
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
+function GetAllBookingById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllBookingsById($id);
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Bookings Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Bookings Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
 
 
     function DeleteBooking($id){
@@ -362,7 +402,7 @@ function GetAllBooking()
         {
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 // Check if the package exists before attempting to delete
-                $package = $this->packages_api_model->GetAllBookings($id);  // Assuming you have a method to get the package by ID
+                $package = $this->packages_api_model->GetAllBookingsById($id);  // Assuming you have a method to get the package by ID
         
                 if ($package) {
                     // If package exists, delete it
@@ -430,7 +470,25 @@ function GetAllInquires()
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
+function GetAllInquiresById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllInquiresById($id);
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Inquires Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
 
+            $response = array("status" => "error", "message" => "No Inquires Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
 
 
 
@@ -522,11 +580,11 @@ function GetAllServices()
         $events = $this->packages_api_model->GetAllServices();
         if ($events!=null) {
             $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Inquires Fetched Successfully");
+            $response = array("status" => "success", "data" => $events, "message" => "Services Fetched Successfully");
         } else {
             $this->output->set_status_header(404);
 
-            $response = array("status" => "error", "message" => "No Inquires Found");
+            $response = array("status" => "error", "message" => "No Services Found");
         }
     } else {
         $this->output->set_status_header(405);
@@ -534,6 +592,31 @@ function GetAllServices()
         $response = array("status" => "error", "message" => "Bad Request");
     }
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function GetAllServicesById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllServicesById($id);
+        if ($events!=null) {
+            // print_r($events);die;
+
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Services Fetched Successfully");
+            // print_r($response);die;
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Services Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+
 }
 
 
@@ -623,6 +706,26 @@ function GetAllCurrency()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $events = $this->packages_api_model->GetAllCurrency();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Currency Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Currency Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllCurrencyById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllCurrencyById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Currency Fetched Successfully");
@@ -792,6 +895,26 @@ function GetAllBus()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $events = $this->packages_api_model->GetAllBus();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Bus Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Bus Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllBusById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllBusById($id);
         if ($events!=null) {
             $this->output->set_status_header(200);
             $response = array("status" => "success", "data" => $events, "message" => "Bus Fetched Successfully");
@@ -1011,11 +1134,32 @@ function GetAllHotel()
         $events = $this->packages_api_model->GetAllHotel();
         if ($events!=null) {
             $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Bus Fetched Successfully");
+            $response = array("status" => "success", "data" => $events, "message" => "Hotel Fetched Successfully");
         } else {
             $this->output->set_status_header(404);
 
-            $response = array("status" => "error", "message" => "No Bus Found");
+            $response = array("status" => "error", "message" => "No Hotel Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function GetAllHotelById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->packages_api_model->GetAllHotelById($id);
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Hotel Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Hotel Found");
         }
     } else {
         $this->output->set_status_header(405);
@@ -1146,6 +1290,7 @@ function DeleteHotel($id){
 function ChangeBookingStatus($id,$status)
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // print_r($status);die;
         $Data = $this->packages_api_model->ChangeBookingStatus($id,$status);
         if ($Data==true) {
             $this->output->set_status_header(200);
@@ -1369,5 +1514,5 @@ function ChangeUserStatus($id,$status){
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
-}
+
 ?>

@@ -57,7 +57,6 @@ function AddBookings($formdata){
  function GetAllBookingsById($id){
     $this->db->order_by('id', 'DESC');
     $data = $this->db->get_where("booking",array("id"=>$id))->result_array();
-    
     if ($data != null) {
         return $data;
     }
@@ -135,7 +134,6 @@ function AddServices($formdata){
  function GetAllServicesById($id){
     $this->db->order_by('id', 'DESC');
     $data = $this->db->get_where("services",array("id"=>$id))->result_array();
-    
     if ($data != null) {
         return $data;
     }
@@ -429,5 +427,6 @@ function ChangeUserStatus($id,$status){
 
     return false;
 }
+
 }
 ?>
