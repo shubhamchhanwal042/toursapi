@@ -1,5 +1,5 @@
 <?php
-defined("BASEPATH") or exit("No Direct Script Access Aloowed");
+defined("BASEPATH") or exit("No Direct Script Access Alowed");
 
 class PackagesController extends CI_Controller
 {
