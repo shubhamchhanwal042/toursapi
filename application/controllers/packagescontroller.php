@@ -817,7 +817,7 @@ function AddBus() {
         $formdata = $this->input->post();
 
         // Upload configuration for both images
-        $config['upload_path'] = 'uploads/Packages/';
+        $config['upload_path'] = 'uploads/bus/';
         $config['allowed_types'] = 'gif|jpg|jpeg|png';
         $config['max_size'] = 102400;  // Max file size in KB (100MB)
         
@@ -942,7 +942,7 @@ function UpdateBus($id){
         if ($result != null) {
             $formdata = $this->input->post();
 
-            $config['upload_path'] = 'uploads/Packages/';
+            $config['upload_path'] = 'uploads/bus/';
             $config['allowed_types'] = 'gif|jpg|jpeg|png';
             $config['max_size'] = 102400;  // Max file size (100MB)
 
@@ -1055,7 +1055,7 @@ function AddHotel() {
         $formdata = $this->input->post();
 
         // Upload configuration for both images
-        $config['upload_path'] = 'uploads/Packages/';
+        $config['upload_path'] = 'uploads/hotel/';
         $config['allowed_types'] = 'gif|jpg|jpeg|png';
         $config['max_size'] = 102400;  // Max file size in KB (100MB)
         
@@ -1180,7 +1180,7 @@ function UpdateHotel($id){
         if ($result != null) {
             $formdata = $this->input->post();
 
-            $config['upload_path'] = 'uploads/Packages/';
+            $config['upload_path'] = 'uploads/hotel/';
             $config['allowed_types'] = 'gif|jpg|jpeg|png';
             $config['max_size'] = 102400;  // Max file size (100MB)
 
