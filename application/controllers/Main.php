@@ -19,7 +19,10 @@ class Main extends CI_Controller
             $formdata = $this->input->post();
             $password = password_hash($formdata["password"], PASSWORD_BCRYPT);
             $formdata["password"] = $password;
+            // print_r($formdata);die;
+
             $result = $this->MainModel->registerUser($formdata);
+            // print_r($result);die;
             if ($result != null) {
                 $this->output->set_status_header(201);
                 $response = array("status" => "success", "message" => "User Registered Successfully");
@@ -66,7 +69,7 @@ class Main extends CI_Controller
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             $result = $this->MainModel->login($email, $password);
-            if ($result != null && $result != false) {
+            if ($result) {
                 $this->output->set_status_header(201);
                 $response = array("status" => "success", "message" => "User Loggedin Successfully");
             } elseif ($result == false) {

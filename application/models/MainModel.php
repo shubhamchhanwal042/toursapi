@@ -28,6 +28,8 @@ class MainModel extends CI_Model
 
     function registerUser($data)
     {
+                    // print_r($data);die;
+
         return $this->db->insert("users", $data);
     }
 

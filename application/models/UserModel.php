@@ -79,4 +79,107 @@ class UserModel extends CI_Model
         return true;
     }
 
+    function GetAllBusByid($id)
+    {
+        $data = $this->db->get_where("bus_booking", array("user_id" => $id))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
+
+    // function AddCabBookings($id)
+    // {
+    //     $data = $this->db->get_where("bus_booking", array("id" => $id))->row_array();
+    //     if ($data != null) {
+    //         return $data;
+    //     }
+    //     return null;
+    // }
+
+    function GetHotelByid($id)
+    {
+        $data = $this->db->get_where("hotel_bookings", array("user_id" => $id))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
+
+    function GetCabByid($id)
+    {
+        $data = $this->db->get_where("cab_booking", array("user_id" => $id))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
+
+    function GetpackageByid($id)
+    {
+        $data = $this->db->get_where("package_booking", array("user_id" => $id))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
+
+
+    // ------------------------------------FOR UPCOMMING TRIPS DATA -----------------------------------
+    public function GetUpcommingTrips($user_id) {
+        // Fetch upcoming trips for a specific user from cab, hotel, package, and bus tables using CURDATE()
+        $query = $this->db->query("
+            (SELECT id, user_id, booked_date, date_completed,status,'cab_booking' AS source_table FROM cab_booking WHERE user_id = ? AND booked_date >= CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date, date_completed,status, 'hotel_bookings' AS source_table FROM hotel_bookings WHERE user_id = ? AND booked_date >= CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date,  date_completed,status,'package_bookings' AS source_table FROM package_bookings WHERE user_id = ? AND booked_date >= CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date,  date_completed,status,'bus_booking' AS source_table FROM bus_booking WHERE user_id = ? AND booked_date >= CURDATE())
+            ORDER BY booked_date ASC
+        ", array($user_id, $user_id, $user_id, $user_id));
+    
+        return $query->result();
+    }
+
+    public function GetRecentTrips($user_id) {
+        // Fetch trips for a specific user from cab, hotel, package, and bus tables using CURDATE() to get previous trips
+        $query = $this->db->query("
+            (SELECT id, user_id, booked_date, date_completed, status, 'cab_booking' AS source_table FROM cab_booking WHERE user_id = ? AND booked_date < CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date, date_completed, status, 'hotel_bookings' AS source_table FROM hotel_bookings WHERE user_id = ? AND booked_date < CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date, date_completed, status, 'package_bookings' AS source_table FROM package_bookings WHERE user_id = ? AND booked_date < CURDATE())
+            UNION ALL
+            (SELECT id, user_id, booked_date, date_completed, status, 'bus_booking' AS source_table FROM bus_booking WHERE user_id = ? AND booked_date < CURDATE())
+            ORDER BY booked_date DESC
+        ", array($user_id, $user_id, $user_id, $user_id));
+    
+        return $query->result();
+    }
+    
+    
+
+    // ---------------------------------------------ADDING REVIEWS APIS -----------------------------
+  
+    function AddReviews($formdata){
+        $this->db->insert('reviews',$formdata);
+        return true;  
+    }
+    
+
+    function GetAllReviewsById($id){
+        $data = $this->db->get_where("reviews", array("id" => $id))->row_array();
+        if ($data != null) {
+            return $data;
+        }
+        return null;
+    }
+
+    function UpdateCurrency($id,$formdata){
+        $this->db->where('id', $id);
+        $this->db->update('reviews', $formdata);
+        return true;
+    }
+
 }

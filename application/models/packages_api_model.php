@@ -28,7 +28,7 @@ class Packages_Api_Model extends CI_Model {
 function GetAllPackagesById($id)
 {
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("packages",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("packages",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;
@@ -56,7 +56,7 @@ function AddBookings($formdata){
 
  function GetAllBookingsById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("booking",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("booking",array("id"=>$id))->row_array();
     if ($data != null) {
         return $data;
     }
@@ -94,7 +94,7 @@ function AddInquires($formdata){
 
  function GetAllInquiresById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("inquiries",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("inquiries",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;
@@ -133,7 +133,7 @@ function AddServices($formdata){
 
  function GetAllServicesById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("services",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("services",array("id"=>$id))->row_array();
     if ($data != null) {
         return $data;
     }
@@ -172,7 +172,7 @@ function AddCurrency($formdata){
 
  function GetAllCurrencyById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("currencyconverter",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("currencyconverter",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;
@@ -211,7 +211,7 @@ function AddBus($formdata){
 
  function GetAllBusById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("bus",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("bus",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;
@@ -251,7 +251,7 @@ function AddHotel($formdata){
 
  function GetAllHotelById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("hotel",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("hotel",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;
@@ -437,7 +437,7 @@ function AddBanner($formdata){
 
 function GetAllBannerById($id){
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("banner",array("id"=>$id))->result_array();
+    $data = $this->db->get_where("banner",array("id"=>$id))->row_array();
     
     if ($data != null) {
         return $data;

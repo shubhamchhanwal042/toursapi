@@ -143,9 +143,18 @@ $route['admin/userstatus/(:any)/(:any)'] = 'PackagesController/ChangeUserStatus/
 
 // ------------------------------------------- USER CONTROLLER ROUTS-------------------------------------------------
 $route['user/addbus'] = 'UserController/AddBusBookings';
+$route['user/getbus/(:any)'] = 'UserController/GetAllBusByid/$1';
+
 $route['user/addhotel'] = 'UserController/AddHotelBookings';
+$route['user/gethotel/(:any)'] = 'UserController/GetHotelByid/$1';
+
+
 $route['user/addcap'] = 'UserController/AddCabBookings';
+$route['user/getcab/(:any)'] = 'UserController/GetCabByid/$1';
+
 $route['user/addpackage'] = 'UserController/PackageBookings';
+$route['user/getpackage/(:any)'] = 'UserController/GetpackageByid/$1';
+
 
 // -------------------------------------SINGUP CONTROLLER---------------------------------------
 $route['signup'] = 'Main/Signup';
@@ -158,3 +167,13 @@ $route['admin/getbanner'] = 'PackagesController/GetAllBanner';
 $route['admin/updatebanner/(:num)'] = 'PackagesController/UpdateBanner/$1';
 $route['admin/getbannerbyid/(:num)'] = 'PackagesController/GetAllBannerById/$1';
 $route['admin/deletebanner/(:num)'] = 'PackagesController/DeleteBanner/$1';
+
+// ----------------------------------USER LOGIN API----------------------------------------------------
+$route['userlogin'] = 'Main/Login';
+
+
+// -------------------------------GET UPCOMMING TRIPS -----------------------------------
+$route['user/gettrips/(:any)'] = 'UserController/GetUpcommingTrips/$1';
+$route['user/getrecenttrips/(:any)'] = 'UserController/GetRecentTrips/$1';
+
+$route['addreview'] = 'UserController/AddReviews';
