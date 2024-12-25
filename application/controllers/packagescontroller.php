@@ -1526,7 +1526,7 @@ function ChangeUserStatus($id,$status){
             $formdata = $this->input->post();
 
             // Upload configuration for both images
-            $config['upload_path'] = 'uploads/Packages/banner/';
+            $config['upload_path'] = 'uploads/banner/';
             $config['allowed_types'] = 'gif|jpg|jpeg|png';
             $config['max_size'] = 102400;  // Max file size in KB (100MB)
             
