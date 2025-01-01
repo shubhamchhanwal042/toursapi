@@ -182,4 +182,11 @@ class UserModel extends CI_Model
         return true;
     }
 
+
+    // ---------------------------------------------- ENQUIRY FORM ---------------------------------
+    
+    function AddEnquiry($formdata){
+        $this->db->insert('enquires',$formdata);
+        return true;  
+    }
 }

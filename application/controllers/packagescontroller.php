@@ -11,155 +11,104 @@ class PackagesController extends CI_Controller
     }
 
     function AddPackages() {
-        // Check if the request method is POST
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $formdata = $this->input->post();
+        $this->load->helper('file');
+        $this->load->model('Packages_Api_Model');  // Load the model
     
-            // Upload configuration for both images
-            $config['upload_path'] = 'uploads/Packages/';
-            $config['allowed_types'] = 'gif|jpg|jpeg|png';
-            $config['max_size'] = 102400;  // Max file size in KB (100MB)
-            
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
+        // Get all form data
+        $formdata = $this->input->post();  
     
-            $uploaded_hotel_files = []; // To store the names of successfully uploaded hotel images
-            $uploaded_tour_files = [];  // To store the names of successfully uploaded tour images
-    
-            // Handle hotel_image upload (single or multiple)
-            if (!empty($_FILES['hotel_image']['name'][0])) {
-                $files = $_FILES['hotel_image']; // 'hotel_image' is the key you send from Postman
-                
-                for ($i = 0; $i < count($files['name']); $i++) {
-                    // Set the $_FILES global array for the current file
-                    $_FILES['hotel_image']['name'] = $files['name'][$i];
-                    $_FILES['hotel_image']['type'] = $files['type'][$i];
-                    $_FILES['hotel_image']['tmp_name'] = $files['tmp_name'][$i];
-                    $_FILES['hotel_image']['error'] = $files['error'][$i];
-                    $_FILES['hotel_image']['size'] = $files['size'][$i];
-    
-                    // Perform the file upload for hotel images
-                    if (!$this->upload->do_upload('hotel_image')) {
-                        $error = $this->upload->display_errors();
-                        log_message('error', 'Hotel Image Upload Error: ' . $error);
-                        $response = array("status" => "error", "message" => "Hotel image upload error", "error" => $error);
-                        $this->output->set_status_header(400);  // Bad Request
-                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-                        return;
-                    } else {
-                        // Hotel image uploaded successfully
-                        $upload_data = $this->upload->data();
-                        $uploaded_hotel_files[] = $upload_data['file_name'];  // Add the file name to the array
-                    }
+        // Handle hotel_image upload (single or multiple)
+        if (!empty($_FILES['hotel_image']['name'][0])) {
+            // Multiple files uploaded for hotel_image
+            $hotel_images = [];
+            foreach ($_FILES['hotel_image']['name'] as $key => $file) {
+                if ($_FILES['hotel_image']['error'][$key] == 0) {
+                    // Add each file as CURLFile to an array
+                    $hotel_images[] = new CURLFile(
+                        $_FILES['hotel_image']['tmp_name'][$key], 
+                        $_FILES['hotel_image']['type'][$key], 
+                        $_FILES['hotel_image']['name'][$key]
+                    );
                 }
             }
-    
-            // Handle tour_image upload (single or multiple)
-            if (!empty($_FILES['tours_images']['name'][0])) {
-                $files = $_FILES['tours_images']; // 'tours_images' is the key you send from Postman
-                
-                for ($i = 0; $i < count($files['name']); $i++) {
-                    // Set the $_FILES global array for the current file
-                    $_FILES['tours_images']['name'] = $files['name'][$i];
-                    $_FILES['tours_images']['type'] = $files['type'][$i];
-                    $_FILES['tours_images']['tmp_name'] = $files['tmp_name'][$i];
-                    $_FILES['tours_images']['error'] = $files['error'][$i];
-                    $_FILES['tours_images']['size'] = $files['size'][$i];
-    
-                    // Perform the file upload for tour images
-                    if (!$this->upload->do_upload('tours_images')) {
-                        $error = $this->upload->display_errors();
-                        log_message('error', 'Tour Image Upload Error: ' . $error);
-                        $response = array("status" => "error", "message" => "Tour image upload error", "error" => $error);
-                        $this->output->set_status_header(400);  // Bad Request
-                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-                        return;
-                    } else {
-                        // Tour image uploaded successfully
-                        $upload_data = $this->upload->data();
-                        $uploaded_tour_files[] = $upload_data['file_name'];  // Add the file name to the array
-                    }
-                }
-            }
-    
-            // If files were uploaded successfully, save the data
-            if (!empty($uploaded_hotel_files) || !empty($uploaded_tour_files)) {
-                // Save the uploaded image file names as comma-separated strings
-                if (!empty($uploaded_hotel_files)) {
-                    $formdata['hotel_image'] = implode(',', $uploaded_hotel_files);  // Save hotel images as comma-separated string
-                }
-                if (!empty($uploaded_tour_files)) {
-                    $formdata['tours_images'] = implode(',', $uploaded_tour_files);  // Save tour images as comma-separated string
-                }
-                
-                // Call the model function to add the package with images
-                $result = $this->Packages_Api_Model->AddPackages($formdata);
-                
-                if ($result) {
-                    $this->output->set_status_header(200);  // Success
-                    $response = array("status" => "success", "message" => "Packages uploaded successfully", "data" => [
-                        'hotel_images' => $uploaded_hotel_files, 
-                        'tours_images' => $uploaded_tour_files
-                    ]);
-                } else {
-                    $this->output->set_status_header(404);  // Not Found
-                    $response = array("status" => "error", "message" => "Error uploading Packages");
-                }
-            } else {
-                $this->output->set_status_header(400);  // Bad Request
-                $response = array("status" => "error", "message" => "No files uploaded");
+            $formdata['hotel_image'] = $hotel_images;  // Add array of files to formdata
+        } elseif (!empty($_FILES['hotel_image']['name'])) {
+            // Single file uploaded for hotel_image
+            if ($_FILES['hotel_image']['error'] == 0) {
+                $formdata['hotel_image'] = new CURLFile(
+                    $_FILES['hotel_image']['tmp_name'], 
+                    $_FILES['hotel_image']['type'], 
+                    $_FILES['hotel_image']['name']
+                );
             }
         } else {
-            // Invalid request method
-            $this->output->set_status_header(405);  // Method Not Allowed
-            $response = array("status" => "error", "message" => "Bad Request");
+            // If no file uploaded, don't include 'hotel_image' in the form data
+            $formdata['hotel_image'] = null;
         }
     
-        // Set the response to JSON and send it
-        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        // Handle tours_images upload (single or multiple)
+        if (!empty($_FILES['tours_images']['name'][0])) {
+            // Multiple files uploaded for tours_images
+            $tours_images = [];
+            foreach ($_FILES['tours_images']['name'] as $key => $file) {
+                if ($_FILES['tours_images']['error'][$key] == 0) {
+                    // Add each file as CURLFile to an array
+                    $tours_images[] = new CURLFile(
+                        $_FILES['tours_images']['tmp_name'][$key], 
+                        $_FILES['tours_images']['type'][$key], 
+                        $_FILES['tours_images']['name'][$key]
+                    );
+                }
+            }
+            $formdata['tours_images'] = $tours_images;  // Add array of files to formdata
+        } elseif (!empty($_FILES['tours_images']['name'])) {
+            // Single file uploaded for tours_images
+            if ($_FILES['tours_images']['error'] == 0) {
+                $formdata['tours_images'] = new CURLFile(
+                    $_FILES['tours_images']['tmp_name'], 
+                    $_FILES['tours_images']['type'], 
+                    $_FILES['tours_images']['name']
+                );
+            }
+        } else {
+            // If no file uploaded, don't include 'tours_images' in the form data
+            $formdata['tours_images'] = null;
+        }
+    
+        // Handle spots and activities - Ensure these are passed correctly as arrays
+        if (!empty($formdata['spots']) && is_array($formdata['spots'])) {
+            $formdata['spots'] = implode(',', $formdata['spots']);  // Convert array to comma-separated string
+        }
+        if (!empty($formdata['activities']) && is_array($formdata['activities'])) {
+            $formdata['activities'] = implode(',', $formdata['activities']);  // Convert array to comma-separated string
+        }
+    
+        // Call the model method to insert the data
+        $inserted_id = $this->Packages_Api_Model->AddPackages($formdata);
+    
+        // Check the insertion result and send a JSON response
+        if ($inserted_id) {
+            // Respond with a success status and data
+            $response = array(
+                'status' => 'success',
+                'message' => 'Package Added Successfully',
+                'data' => array('inserted_id' => $inserted_id)
+            );
+            $this->output->set_status_header(200);  // Set status code to 200 (OK)
+        } else {
+            // Respond with an error message
+            $response = array(
+                'status' => 'error',
+                'message' => 'Package Add Failed'
+            );
+            $this->output->set_status_header(500);  // Set status code to 500 (Internal Server Error)
+        }
+    
+        // Return JSON response
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
     
-
-
-    function GetAllPackages()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $events = $this->Packages_Api_Model->GetAllPackages();
-            if ($events!=null) {
-                $this->output->set_status_header(200);
-                $response = array("status" => "success", "data" => $events, "message" => "Packages Fetched Successfully");
-            } else {
-                $this->output->set_status_header(404);
-
-                $response = array("status" => "error", "message" => "No Packages Found");
-            }
-        } else {
-            $this->output->set_status_header(405);
-
-            $response = array("status" => "error", "message" => "Bad Request");
-        }
-        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-    }
-
-    function GetAllPackagesById($id)
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $events = $this->Packages_Api_Model->GetAllPackagesById($id );
-            if ($events!=null) {
-                $this->output->set_status_header(200);
-                $response = array("status" => "success", "data" => $events, "message" => "Packages Fetched Successfully");
-            } else {
-                $this->output->set_status_header(404);
-
-                $response = array("status" => "error", "message" => "No Packages Found");
-            }
-        } else {
-            $this->output->set_status_header(405);
-
-            $response = array("status" => "error", "message" => "Bad Request");
-        }
-        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-    }
+    
 
 
     public function UpdatePackages($id)
@@ -977,11 +926,7 @@ function UpdateBus($id){
                         return;
                     }
                 }
-            } else {
-                // If no files are uploaded for hotel_image, keep the old images
-                $uploaded_photos = explode(',', $event['photos']);  // Keep old image(s) if no new image is uploaded
-            }
-
+            } 
             
 
             // Update formdata with the new or old image(s)
@@ -1045,6 +990,239 @@ function DeleteBus($id){
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 }
+
+
+// ------------------------------------------------ADD CAP APIS -----------------------------------------
+
+function AddCab() {
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $formdata = $this->input->post();
+
+        // Upload configuration for both images
+        $config['upload_path'] = 'uploads/cab/';
+        $config['allowed_types'] = 'gif|jpg|jpeg|png';
+        $config['max_size'] = 102400;  // Max file size in KB (100MB)
+        
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        
+
+        $uploaded_Bus_files = []; // To store the names of successfully uploaded hotel images
+
+        // Handle hotel_image upload (single or multiple)
+        if (!empty($_FILES['photos']['name'][0])) {
+            $files = $_FILES['photos']; // 'hotel_image' is the key you send from Postman
+            
+            for ($i = 0; $i < count($files['name']); $i++) {
+                // Set the $_FILES global array for the current file
+                $_FILES['photos']['name'] = $files['name'][$i];
+                $_FILES['photos']['type'] = $files['type'][$i];
+                $_FILES['photos']['tmp_name'] = $files['tmp_name'][$i];
+                $_FILES['photos']['error'] = $files['error'][$i];
+                $_FILES['photos']['size'] = $files['size'][$i];
+
+                // Perform the file upload for hotel images
+                if (!$this->upload->do_upload('photos')) {
+                    $error = $this->upload->display_errors();
+                    log_message('error', 'Hotel Image Upload Error: ' . $error);
+                    $response = array("status" => "error", "message" => "photos image upload error", "error" => $error);
+                    $this->output->set_status_header(400);  // Bad Request
+                    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+                    return;
+                } else {
+                    // Hotel image uploaded successfully
+                    $upload_data = $this->upload->data();
+                    $uploaded_Bus_files[] = $upload_data['file_name'];  // Add the file name to the array
+                }
+            }
+        }
+
+
+      
+        // If files were uploaded successfully, save the data
+        if (!empty($uploaded_Bus_files)) {
+            // Save the uploaded image file names as comma-separated strings
+            if (!empty($uploaded_Bus_files)) {
+                $formdata['photos'] = implode(',', $uploaded_Bus_files);  // Save hotel images as comma-separated string
+            }
+            
+            // Call the model function to add the package with images
+            $result = $this->Packages_Api_Model->Addcab($formdata);
+            
+            if ($result) {
+                $this->output->set_status_header(200);  // Success
+                $response = array("status" => "success", "message" => "Cab uploaded successfully", "data" => [
+                    'photos' => $formdata['photos'], 
+                ]);
+            } else {
+                $this->output->set_status_header(404);  // Not Found
+                $response = array("status" => "error", "message" => "Error uploading Cab");
+            }
+        } else {
+            $this->output->set_status_header(400);  // Bad Request
+            $response = array("status" => "error", "message" => "No files uploaded");
+        }
+    } else {
+        // Invalid request method
+        $this->output->set_status_header(405);  // Method Not Allowed
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+
+    // Set the response to JSON and send it
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function GetAllCab()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllCab();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Cab Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Cab Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllCabById($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllCabById($id);
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Cab Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Cab Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function UpdateCab($id){
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $result = $this->Packages_Api_Model->GetAllCabById($id);
+
+        if ($result != null) {
+            $formdata = $this->input->post();
+
+            $config['upload_path'] = 'uploads/cab/';
+            $config['allowed_types'] = 'gif|jpg|jpeg|png';
+            $config['max_size'] = 102400;  // Max file size (100MB)
+
+            // Load the upload library and initialize
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            // Initialize the arrays to hold new file names
+            $uploaded_photos = [];
+
+            // Handle hotel_image upload (single or multiple)
+            if (!empty($_FILES['photos']['name'][0])) {
+                $files = $_FILES['photos']; // 'hotel_image' is the key you send from Postman
+                
+                for ($i = 0; $i < count($files['name']); $i++) {
+                    // Set the $_FILES global array for the current file
+                    $_FILES['photos']['name'] = $files['name'][$i];
+                    $_FILES['photos']['type'] = $files['type'][$i];
+                    $_FILES['photos']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['photos']['error'] = $files['error'][$i];
+                    $_FILES['photos']['size'] = $files['size'][$i];
+
+                    // Perform the file upload for hotel images
+                    if ($this->upload->do_upload('photos')) {
+                        $upload_data = $this->upload->data();
+                        $uploaded_photos[] = $upload_data['file_name'];  // Add uploaded file name to the array
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->output->set_status_header(400);
+                        $response = array("status" => "error", "message" => "Hotel image upload error: " . $error);
+                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+                        return;
+                    }
+                }
+            } 
+            
+
+            // Update formdata with the new or old image(s)
+            if (!empty($uploaded_photos)) {
+                $formdata['photos'] = implode(',', $uploaded_photos);  // Store hotel images as comma-separated values
+            }
+           
+
+
+
+            $result = $this->Packages_Api_Model->UpdateCab($id,$formdata);
+            if ($result ==true) {
+                $this->output->set_status_header(200 );
+                $response = array("status" => "success", "message" => "Cab Data Updated Successfully");
+            } else {
+                $this->output->set_status_header(500);
+                $response = array("status" => "error", "message" => "Some Error Occured While Updating Cab Data");
+            }
+        }
+        else{
+            $this->output->set_status_header(404);
+            $response = array("status" => "error", "message" => "No Cab Found");
+        } 
+    }
+    else {
+        $this->output->set_status_header(405);
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function DeleteCab($id){
+
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllCabById($id);  // Assuming you have a method to get the package by ID
+    
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteCab($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Cab Deleted Successfully");
+                } else {
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Cab");
+                }
+            } else {
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Cab Not Found");
+            }
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
+        }
+    
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+}
+
 
 // -----------------------------------------HOTEL APIS-------------------------------------------------
 
@@ -1215,11 +1393,7 @@ function UpdateHotel($id){
                         return;
                     }
                 }
-            } else {
-                // If no files are uploaded for hotel_image, keep the old images
-                $uploaded_photos = explode(',', $event['photos']);  // Keep old image(s) if no new image is uploaded
             }
-
             
 
             // Update formdata with the new or old image(s)
@@ -1461,11 +1635,32 @@ function GetAllCounts()
         $counts = $this->Packages_Api_Model->GetAllCounts();
         if ($counts!=null) {
             $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $counts, "message" => "Bus Fetched Successfully");
+            $response = array("status" => "success", "data" => $counts, "message" => "Counts Fetched Successfully");
         } else {
             $this->output->set_status_header(404);
 
-            $response = array("status" => "error", "message" => "No Bus Found");
+            $response = array("status" => "error", "message" => "No Counts Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function DashboardCount()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $counts = $this->Packages_Api_Model->DashboardCount();
+        if ($counts!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $counts, "message" => "Counts Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Counts Found");
         }
     } else {
         $this->output->set_status_header(405);
@@ -1685,10 +1880,7 @@ function UpdateBanner($id){
                         return;
                     }
                 }
-            } else {
-                // If no files are uploaded for hotel_image, keep the old images
-                $uploaded_photos = explode(',', $event['photos']);  // Keep old image(s) if no new image is uploaded
-            }
+            } 
 
             
 
@@ -1755,8 +1947,180 @@ function DeleteBanner($id){
 }
 
 
-// ---------------------------------------------ADDING REVIEWS FUNCTION --------------------------
+// -------------------------------------------REMAINED-ADDING GET ALL BOOKING FUNCTION --------------------------
 
+function GetAllBusBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllBusBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "bus booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Bus booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllCabBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllCabBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Cab booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Cab booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllHotelBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllHotelBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Hotel booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Hotel booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllPackageBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllPackageBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Package booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Package booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function ChangePackageBookingStatus($id,$status)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $Data = $this->Packages_Api_Model->ChangePackageBookingStatus($id,$status);
+        if ($Data==true) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $Data, "message" => "PackageBooking Status Updated Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Data Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+// -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
+function GetAllReviews()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllReviews();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Reviews booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Reviews booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function DelteReviewsByid($id){
+
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllReviewsyId($id);  // Assuming you have a method to get the package by ID
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DelteReviewsByid($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "AllReview Deleted Successfully");
+                } else {
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting AllReview");
+                }
+            } else {
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "AllReview Not Found");
+            }
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
+        }
+    
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+}
+
+
+
+function ChangeReviewStatus($id,$status){
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $formdata = $this->input->post();
+        // print_r($formdata);die;
+        $result = $this->Packages_Api_Model->ChangeReviewStatus($id,$status);
+        if($result == true){
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Review Data Updated Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Review account_status Data");
+        }
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
 
 }
 ?>

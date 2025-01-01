@@ -104,7 +104,7 @@ function AddInquires($formdata){
 function GetAllInquires()
 {
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("inquiries")->result_array();
+    $data = $this->db->get_where("enquires")->result_array();
     
     if ($data != null) {
         return $data;
@@ -173,7 +173,6 @@ function AddCurrency($formdata){
  function GetAllCurrencyById($id){
     $this->db->order_by('id', 'DESC');
     $data = $this->db->get_where("currencyconverter",array("id"=>$id))->row_array();
-    
     if ($data != null) {
         return $data;
     }
@@ -240,7 +239,41 @@ function DeleteBus($id){
     return $this->db->delete("bus");
 }
 
+// -------------------------------------------------ADDING CAB -----------------------------------
+function AddCab($formdata){
+    $this->db->insert('cab',$formdata);
+    return true;
+}
+function GetAllCabById($id){
+    $this->db->order_by('id', 'DESC');
+    $data = $this->db->get_where("cab",array("id"=>$id))->row_array();
+    
+    if ($data != null) {
+        return $data;
+    }
+}
 
+function GetAllCab()
+{
+    $this->db->order_by('id', 'DESC');
+    $data = $this->db->get_where("cab")->result_array();
+    
+    if ($data != null) {
+        return $data;
+    }
+}
+
+
+function UpdateCab($id,$formdata){
+    $this->db->where('id', $id);
+    $this->db->update('cab', $formdata);
+    return true;
+}
+
+function DeleteCab($id){
+    $this->db->where("id",$id);
+    return $this->db->delete("cab");
+}
 // -------------------------------------Hotel API---------------------------------------------------
 // -------------------------------------------------------------------------------------------------------
 
@@ -405,6 +438,24 @@ public function GetAllCounts() {
     return $query->row(); // Returns a single row with counts
 }
 
+public function DashboardCount() {
+    // Select count(*) for each table
+    $this->db->select('
+        (SELECT COUNT(*) FROM bus) AS bus_count,
+        (SELECT COUNT(*) FROM cab) AS cab_count,
+        (SELECT COUNT(*) FROM hotel) AS hotel_count,
+        (SELECT COUNT(*) FROM packages) AS package_count,
+        (SELECT COUNT(*) FROM booking) AS booking_count,
+        (SELECT COUNT(*) FROM users) AS user_count,
+
+    ');
+
+    // Execute the query and return the result
+    $query = $this->db->get();
+
+    return $query->row(); // Returns a single row with counts
+}
+
 function GetAllUsers(){
    $data = $this->db->get_where('users')->result_array();
     return $data;
@@ -466,6 +517,158 @@ function DeleteBanner($id){
     return $this->db->delete("banner");
 }
 
+// // ------------------------------------------GET ALL BOOKINGS --------------------------------
+// function GetAllBusBookingdd()
+// {
+//     $this->db->order_by('id', 'DESC');
+//     $data = $this->db->get_where("bus_booking")->result_array();
+    
+//     if ($data != null) {
+//         return $data;
+//     }
+// }
 
+function GetAllBusBooking() {
+    // Select all columns from both 'users' and 'bus_booking' tables
+    $this->db->select('users.*, bus_booking.*');
+    $this->db->from('users');
+    $this->db->join('bus_booking', 'users.id = bus_booking.user_id', 'inner');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;  // Return the fetched result
+}
+
+function GetAllCabBooking() {
+    // Select all columns from both 'users' and 'bus_booking' tables
+    $this->db->select('users.*, cab_booking.*');
+    $this->db->from('users');
+    $this->db->join('cab_booking', 'users.id = cab_booking.user_id', 'inner');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;  // Return the fetched result
+}
+
+
+
+// function GetAllCabBooking()
+// {
+//     $this->db->order_by('id', 'DESC');
+//     $data = $this->db->get_where("cab_booking")->result_array();
+    
+//     if ($data != null) {
+//         return $data;
+//     }
+// }
+
+function GetAllHotelBooking() {
+    // Select all columns from both 'users' and 'bus_booking' tables
+    $this->db->select('users.*, hotel_bookings.*');
+    $this->db->from('users');
+    $this->db->join('hotel_bookings', 'users.id = hotel_bookings.user_id', 'inner');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;  // Return the fetched result
+}
+
+// function GetAllHotelBooking()
+// {
+//     $this->db->order_by('id', 'DESC');
+//     $data = $this->db->get_where("hotel_bookings")->result_array();
+    
+//     if ($data != null) {
+//         return $data;
+//     }
+// }
+
+
+function GetAllPackageBooking() {
+    // Select all columns from both 'users' and 'bus_booking' tables
+    $this->db->select('users.*, package_bookings.*');
+    $this->db->from('users');
+    $this->db->join('package_bookings', 'users.id = package_bookings.user_id', 'inner');
+    $query = $this->db->get();
+    $result = $query->result();
+    return $result;  // Return the fetched result
+}
+
+// function GetAllPackageBooking()
+// {
+//     $this->db->order_by('id', 'DESC');
+//     $data = $this->db->get_where("package_bookings")->result_array();
+    
+//     if ($data != null) {
+//         return $data;
+//     }
+// }
+
+function ChangePackageBookingStatus($id,$status)
+{
+    $data=$this->db->get_where("package_bookings",array("id"=>$id))->row_array();
+    if($data!=null)
+    {
+        if ($status == "Completed") {
+            $this->db->set("status", "Completed")->where("id", $id)->update("package_bookings");
+        } elseif ($status == "Pending") {
+            $this->db->set("status", "Pending")->where("id", $id)->update("package_bookings");
+        } else {
+            $this->db->set("status", "Cancelled")->where("id", $id)->update("package_bookings");
+        }
+
+        return true;
+    }
+
+    return false;
+  
+}
+
+// -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
+function GetAllReviews()
+{
+    $this->db->order_by('id', 'DESC');
+    $data = $this->db->get_where("reviews")->result_array();
+    
+    if ($data != null) {
+        return $data;
+    }
+}
+
+function GetAllReviewsyId($id)
+{
+    // print_r($id);die;
+
+    $this->db->where('id',$id);
+    $data = $this->db->delete("reviews");
+    return $data;
+
+}
+
+function DelteReviewsByid($id)
+{
+        // print_r($id);die;
+
+    $this->db->where("id",$id);
+    return $this->db->delete("reviews");
+}
+
+
+
+
+function ChangeReviewStatus($id,$status){
+    $data=$this->db->get_where(" reviews",array("id"=>$id))->row_array();
+    if($data!=null)
+    {
+        if ($status == "Active") {
+            $this->db->set("status", "Active")->where("id", $id)->update("reviews");
+        } elseif ($status == "InActive") {
+            $this->db->set("status", "InActive")->where("id", $id)->update("reviews");
+        } else {
+            $this->db->set("status", "Cancelled")->where("id", $id)->update("reviews");
+        }
+
+        return true;
+    }
+
+    return false;
+}
 }
 ?>

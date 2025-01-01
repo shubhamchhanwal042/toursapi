@@ -265,5 +265,25 @@ function UpdateReviews($id){
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
 
+
+// ---------------------------------USER ADD ENQUIRY API ------------------------------------------
+
+
+function AddEnquiry(){
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $formdata = $this->input->post();
+        // print_r($formdata);die;
+        $result = $this->UserModel->AddEnquiry($formdata);
+        if($result == true){
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Enquiry Data Added Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Adding Enquiry Data");
+        }
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
 }
 ?>

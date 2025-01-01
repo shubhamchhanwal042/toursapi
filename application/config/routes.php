@@ -104,6 +104,13 @@ $route['admin/updatebus/(:num)'] = 'PackagesController/UpdateBus/$1';
 $route['admin/getbusbyid/(:num)'] = 'PackagesController/GetAllBusById/$1';
 $route['admin/deletebus/(:num)'] = 'PackagesController/DeleteBus/$1';
 
+// ---------------------------Cab SECTION -------------------------------------
+$route['admin/addcab'] = 'PackagesController/AddCab';
+$route['admin/getcab'] = 'PackagesController/GetAllCab';
+$route['admin/updatecab/(:num)'] = 'PackagesController/UpdateCab/$1';
+$route['admin/getcabbyid/(:num)'] = 'PackagesController/GetAllCabById/$1';
+$route['admin/deletecab/(:num)'] = 'PackagesController/DeleteCab/$1';
+
 // ---------------------------HOTEL SECTION -------------------------------------
 $route['admin/addhotel'] = 'PackagesController/AddHotel';
 $route['admin/gethotel'] = 'PackagesController/GetAllHotel';
@@ -133,8 +140,14 @@ $route['admin/capbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeCapSt
 $route['admin/bookcap'] = 'PackagesController/AddHotel_Bookings';
 $route['admin/hotelbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangeHotelStatus/$1/$2';
 
+// -------------------------------------------TO CHANGE PACKAGE BOOKING STATUS ----------------------
+// $route['admin/bookcap'] = 'PackagesController/AddHotel_Bookings';
+$route['admin/packagebookingbookingstatus/(:any)/(:any)'] = 'PackagesController/ChangePackageBookingStatus/$1/$2';
+
 // --------------------------------------------ROUTES TO GET THE COUNTS ON DASHBOARD---------------------------------
-$route['admin/dashboardcounts'] = 'PackagesController/GetAllCounts';
+$route['user/dashboardcounts'] = 'PackagesController/GetAllCounts';
+$route['admin/dashboardcount'] = 'PackagesController/DashboardCount';
+
 
 // ----------------------------------------- ROUTES TO GET ALL USERS---------------------------------------------------
 $route['admin/getusers'] = 'PackagesController/GetAllUsers';
@@ -177,3 +190,21 @@ $route['user/gettrips/(:any)'] = 'UserController/GetUpcommingTrips/$1';
 $route['user/getrecenttrips/(:any)'] = 'UserController/GetRecentTrips/$1';
 
 $route['addreview'] = 'UserController/AddReviews';
+
+ // ---------------------------------------------GET BOOKINGS DATA ------------------------------- -->
+$route['admin/getbusbookings'] = 'PackagesController/GetAllBusBooking';
+$route['admin/getcabbookings'] = 'PackagesController/GetAllCabBooking';
+$route['admin/gethotelbookings'] = 'PackagesController/GetAllHotelBooking';
+$route['admin/getpackagebookings'] = 'PackagesController/GetAllPackageBooking';
+
+// ------------------------------------ADD REVIEWS -------------------------------------
+ $route['admin/review'] = 'PackagesController/GetAllReviews';
+ $route['admin/reviewstatus/(:any)/(:any)'] = 'PackagesController/ChangeReviewStatus/$1/$2';
+ $route['admin/deletereview/(:any)'] = 'PackagesController/DelteReviewsByid/$1';
+
+
+//  -----------------------------------------  ENQUIRY API ------------------------------------
+
+$route['user/addenquiry'] = 'UserController/AddEnquiry';
+
+
