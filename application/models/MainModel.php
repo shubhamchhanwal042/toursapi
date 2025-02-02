@@ -62,4 +62,15 @@ class MainModel extends CI_Model
     }
 
 
+    // Ganesh Functions
+    
+    public function checkEmailExists($email)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('users');
+
+        return ($query->num_rows() > 0); 
+    }
+
+
 }

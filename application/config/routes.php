@@ -168,10 +168,16 @@ $route['user/getcab/(:any)'] = 'UserController/GetCabByid/$1';
 $route['user/addpackage'] = 'UserController/PackageBookings';
 $route['user/getpackage/(:any)'] = 'UserController/GetpackageByid/$1';
 
+// ------------------------------------------- Ganesh  (Get All Hotel) ROUTS-------------------------------------------------
+$route['user/getallhotels'] = 'UserController/GetAllHotels';
 
 // -------------------------------------SINGUP CONTROLLER---------------------------------------
-$route['signup'] = 'Main/Signup';
+$route['user/signup'] = 'Main/Signup';
 $route['AdminLogin'] = 'Main/AdminLogin';
+
+// Ganesh Routes
+$route['login'] = 'Main/Login'; 
+$route['IsEmailAlreadyExists'] = 'Main/IsEmailAlreadyExists';
 
 // -------------------------------------------------BANNER ROUTES PACKAGES CONTROLLER--------------
 

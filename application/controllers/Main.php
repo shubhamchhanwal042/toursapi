@@ -46,7 +46,7 @@ class Main extends CI_Controller
             // print_r($email);die;
             $result = $this->MainModel->adminLogin($email, $password);
             if ($result != null && $result != false) {
-                $this->output->set_status_header(201);
+                $this->output->set_status_header(200);
                 $response = array("status" => "success", "message" => "Admin Loggedin Successfully");
             } elseif ($result == false) {
                 $this->output->set_status_header(404);
@@ -70,7 +70,7 @@ class Main extends CI_Controller
             $password = $this->input->post('password');
             $result = $this->MainModel->login($email, $password);
             if ($result) {
-                $this->output->set_status_header(201);
+                $this->output->set_status_header(200);
                 $response = array("status" => "success", "message" => "User Loggedin Successfully");
             } elseif ($result == false) {
                 $this->output->set_status_header(404);
@@ -88,4 +88,45 @@ class Main extends CI_Controller
     }
 
 
+    // Ganesh APIS
+    public function IsEmailAlreadyExists()
+    {
+        $email = $this->input->post('email');
+
+        if (!$email) {
+            $response = ["status" => "error", "message" => "Email is required."];
+            error_log(json_encode($response));
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($response));
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $response = ["status" => "error", "message" => "Invalid email format."];
+            error_log(json_encode($response));
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($response));
+        }
+
+        // Check if email exists
+        $exists = $this->MainModel->checkEmailExists($email);
+        error_log("Email Exists Check: " . var_export($exists, true));
+
+        // Ensure `exists` is always present in the response
+        $response = [
+            "status" => $exists ? "error" : "success",
+            "exists" => (bool) $exists, // Ensure `exists` is always a boolean
+            "message" => $exists ? "Email already exists." : "Email is available."
+        ];
+
+        error_log("Final API Response: " . json_encode($response));
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($exists ? 409 : 200)
+            ->set_output(json_encode($response));
+    }
 }

@@ -285,5 +285,76 @@ function AddEnquiry(){
     }
     $this->output->set_content_type("application/json")->set_output(json_encode($response));
 }
+
+
+
+
+// <!--------------------------- Ganesh Views ------------------------>
+// <!-------------- Get All Hotels ------------------->
+public function GetAllHotels()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $result = $this->Packages_Api_Model->GetAllHotel();
+        
+        if (!empty($result)) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Hotels fetched successfully", "data" => $result);
+        } else {
+            $this->output->set_status_header(404);
+            $response = array("status" => "error", "message" => "No hotels found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+        $response = array("status" => "error", "message" => "Method Not Allowed");
+    }
+    
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+// <!-------------- Get All Hotels Ends Here ------------------->
+
+
+
+// <!-------------- Get All Cabs ------------------->
+public function GetAllCab()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $result = $this->Packages_Api_Model->GetAllCab();
+        
+        if (!empty($result)) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Cabs fetched successfully", "data" => $result);
+        } else {
+            $this->output->set_status_header(404);
+            $response = array("status" => "error", "message" => "No Cabs found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+        $response = array("status" => "error", "message" => "Method Not Allowed");
+    }
+    
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+// <!-------------- Get All Cabs Ends Here ------------------->
+
+
+
+
+
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

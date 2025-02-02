@@ -6,14 +6,21 @@ class Packages_Api_Model extends CI_Model {
     }
 // ---------------------------------------------PACKAGES API-----------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------------------
-    public function AddPackages($data) {
-        $this->db->insert('packages', $data);
+public function AddPackages($data) {
+    // Make sure you have the columns `hotel_image` and `tours_images` as TEXT or VARCHAR in the database
+    // Convert JSON data back to an array or leave it as a string for storage
+
+    // You can convert the JSON back into an array before saving, but for now, let's keep it as a string
+    // in the database.
+    $this->db->insert('packages', $data);
+    
     if ($this->db->affected_rows() > 0) {
         return true;
     } else {
         return false;
     }
-    }
+}
+
 
     function GetAllPackages()
     {
@@ -224,6 +231,9 @@ function GetAllBus()
     
     if ($data != null) {
         return $data;
+    }
+    else{
+        return null;
     }
 }
 
@@ -486,12 +496,30 @@ function AddBanner($formdata){
     return true;
 }
 
-function GetAllBannerById($id){
+// function GetAllBannerById($id){
+//     $this->db->order_by('id', 'DESC');
+//     $data = $this->db->get_where("banner",array("id"=>$id))->row_array();
+    
+//     if ($data != null) {
+//         return $data;
+//     }
+//     else{
+//         return null;
+//     }
+// }
+public function GetAllBannerById($id) {
     $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("banner",array("id"=>$id))->row_array();
+    $this->db->where("id", $id);
+    $query = $this->db->get("banner");
+
+    // Debugging
+    echo "Executed Query: " . $this->db->last_query();
+    $data = $query->row_array();
     
     if ($data != null) {
         return $data;
+    } else {
+        return null;
     }
 }
 
@@ -529,24 +557,41 @@ function DeleteBanner($id){
 // }
 
 function GetAllBusBooking() {
-    // Select all columns from both 'users' and 'bus_booking' tables
-    $this->db->select('users.*, bus_booking.*');
+    // Select all columns from 'users', 'bus_booking', and 'bus' tables
+    $this->db->select('users.*, bus_booking.*, bus.*');
     $this->db->from('users');
-    $this->db->join('bus_booking', 'users.id = bus_booking.user_id', 'inner');
+    $this->db->join('bus_booking', 'users.id = bus_booking.user_id', 'inner');  // Join users with bus_booking
+    $this->db->join('bus', 'bus.id = bus_booking.bus_id', 'inner');  // Join bus_booking with bus
+
+    // Execute the query and fetch the result
     $query = $this->db->get();
-    $result = $query->result();
+    $result = $query->result();  // Get result as an array of objects
     return $result;  // Return the fetched result
 }
 
 function GetAllCabBooking() {
-    // Select all columns from both 'users' and 'bus_booking' tables
-    $this->db->select('users.*, cab_booking.*');
+    // Select all columns from 'users', 'cab_booking', and 'cab' tables
+    $this->db->select('users.*, cab_booking.*, cab.*');
+    
+    // Start with 'users' table
     $this->db->from('users');
+    
+    // Join the 'cab_booking' table where the user_id in cab_booking matches the id in users
     $this->db->join('cab_booking', 'users.id = cab_booking.user_id', 'inner');
+    
+    // Join the 'cab' table where the cab_id in cab_booking matches the id in cab
+    $this->db->join('cab', 'cab.id = cab_booking.cab_id', 'inner');
+    
+    // Execute the query
     $query = $this->db->get();
+    
+    // Fetch the result as an array of objects
     $result = $query->result();
+    
     return $result;  // Return the fetched result
 }
+
+
 
 
 
@@ -571,6 +616,7 @@ function GetAllHotelBooking() {
 }
 
 // function GetAllHotelBooking()
+
 // {
 //     $this->db->order_by('id', 'DESC');
 //     $data = $this->db->get_where("hotel_bookings")->result_array();
@@ -624,13 +670,34 @@ function ChangePackageBookingStatus($id,$status)
 // -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
 function GetAllReviews()
 {
-    $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("reviews")->result_array();
-    
-    if ($data != null) {
-        return $data;
-    }
+    // Select all columns from all three tables (users, reviews, and packages)
+    $this->db->select('
+    users.*, 
+    reviews.*, 
+    package_bookings.*, 
+    reviews.status AS review_status,
+    package_bookings.status AS package_status'  // Alias for status from the package_bookings table
+);
+
+// Define the tables to join
+$this->db->from('users');
+
+// Join the reviews table on user_id
+$this->db->join('reviews', 'users.id = reviews.user_id', 'inner');
+
+// Join the packages table on user_id
+$this->db->join('package_bookings', 'users.id = package_bookings.user_id', 'inner');
+
+// Run the query and fetch the result
+$query = $this->db->get();
+
+// Return the result as an array of objects
+return $query->result();  // Use result_array() if you prefer an array
+
+
 }
+
+
 
 function GetAllReviewsyId($id)
 {
