@@ -10,12 +10,13 @@ class PackagesController extends CI_Controller
         $this->load->library("session");
     }
 
-    function AddPackages() {
+    public function AddPackages() {
         $this->load->helper('file');
         $this->load->model('Packages_Api_Model');  // Load the model
     
         // Get all form data
         $formdata = $this->input->post();  
+        // print_r($formdata);die;
     
         // Handle hotel_image upload (single or multiple)
         if (!empty($_FILES['hotel_image']['name'][0])) {
@@ -23,23 +24,17 @@ class PackagesController extends CI_Controller
             $hotel_images = [];
             foreach ($_FILES['hotel_image']['name'] as $key => $file) {
                 if ($_FILES['hotel_image']['error'][$key] == 0) {
-                    // Add each file as CURLFile to an array
-                    $hotel_images[] = new CURLFile(
-                        $_FILES['hotel_image']['tmp_name'][$key], 
-                        $_FILES['hotel_image']['type'][$key], 
-                        $_FILES['hotel_image']['name'][$key]
-                    );
+                    // Add the file path or name instead of CURLFile
+                    $hotel_images[] = $_FILES['hotel_image']['name'][$key];
                 }
             }
-            $formdata['hotel_image'] = $hotel_images;  // Add array of files to formdata
+            // Convert the array to a string (comma-separated)
+            $formdata['hotel_image'] = implode(',', $hotel_images);
         } elseif (!empty($_FILES['hotel_image']['name'])) {
             // Single file uploaded for hotel_image
             if ($_FILES['hotel_image']['error'] == 0) {
-                $formdata['hotel_image'] = new CURLFile(
-                    $_FILES['hotel_image']['tmp_name'], 
-                    $_FILES['hotel_image']['type'], 
-                    $_FILES['hotel_image']['name']
-                );
+                // Add the file path or name instead of CURLFile
+                $formdata['hotel_image'] = $_FILES['hotel_image']['name'];
             }
         } else {
             // If no file uploaded, don't include 'hotel_image' in the form data
@@ -52,23 +47,17 @@ class PackagesController extends CI_Controller
             $tours_images = [];
             foreach ($_FILES['tours_images']['name'] as $key => $file) {
                 if ($_FILES['tours_images']['error'][$key] == 0) {
-                    // Add each file as CURLFile to an array
-                    $tours_images[] = new CURLFile(
-                        $_FILES['tours_images']['tmp_name'][$key], 
-                        $_FILES['tours_images']['type'][$key], 
-                        $_FILES['tours_images']['name'][$key]
-                    );
+                    // Add the file path or name instead of CURLFile
+                    $tours_images[] = $_FILES['tours_images']['name'][$key];
                 }
             }
-            $formdata['tours_images'] = $tours_images;  // Add array of files to formdata
+            // Convert the array to a string (comma-separated)
+            $formdata['tours_images'] = implode(',', $tours_images);
         } elseif (!empty($_FILES['tours_images']['name'])) {
             // Single file uploaded for tours_images
             if ($_FILES['tours_images']['error'] == 0) {
-                $formdata['tours_images'] = new CURLFile(
-                    $_FILES['tours_images']['tmp_name'], 
-                    $_FILES['tours_images']['type'], 
-                    $_FILES['tours_images']['name']
-                );
+                // Add the file path or name instead of CURLFile
+                $formdata['tours_images'] = $_FILES['tours_images']['name'];
             }
         } else {
             // If no file uploaded, don't include 'tours_images' in the form data
@@ -76,11 +65,11 @@ class PackagesController extends CI_Controller
         }
     
         // Handle spots and activities - Ensure these are passed correctly as arrays
-        if (!empty($formdata['spots']) && is_array($formdata['spots'])) {
-            $formdata['spots'] = implode(',', $formdata['spots']);  // Convert array to comma-separated string
-        }
         if (!empty($formdata['activities']) && is_array($formdata['activities'])) {
             $formdata['activities'] = implode(',', $formdata['activities']);  // Convert array to comma-separated string
+        }
+        if (!empty($formdata['spots']) && is_array($formdata['spots'])) {
+            $formdata['spots'] = implode(',', $formdata['spots']);  // Convert array to comma-separated string
         }
     
         // Call the model method to insert the data
@@ -107,7 +96,7 @@ class PackagesController extends CI_Controller
         // Return JSON response
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
-    
+     
     
 
 
@@ -2106,7 +2095,8 @@ function DelteReviewsByid($id){
 
 
 function ChangeReviewStatus($id,$status){
-
+// print_r($id);die;
+print_r($status);die;
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $formdata = $this->input->post();
         // print_r($formdata);die;
