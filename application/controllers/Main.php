@@ -91,6 +91,7 @@ class Main extends CI_Controller
 
 
     // Ganesh APIS
+    // ------------------ SEND OTP  ------------------ 
     public function IsEmailAlreadyExists()
     {
         $email = $this->input->post('email');
@@ -175,9 +176,10 @@ class Main extends CI_Controller
             ]);
         }
     }
+    // ------------------ SEND OTP ENDS HERE  ------------------ 
 
 
-
+   // ------------------ VERIFY OTP   ------------------ 
     public function VerifyOtp()
     {
         $otp = $this->input->post('otp');
@@ -216,4 +218,54 @@ class Main extends CI_Controller
             ]);
         }
     }
+    // ------------------ VERIFY OTP ENDS HERE  ------------------ 
+
+
+     // ------------------ SET NEW PASSSOWRD ------------------ 
+     public function SetNewPassword() {
+        $email = $this->session->userdata('otp_email'); // Retrieve email from session
+        $new_password = $this->input->post('password');
+        $confirm_password = $this->input->post('confirm_password');
+
+        if (!$email) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Session expired. Please request OTP again.'
+            ]);
+            return;
+        }
+
+        if (!$new_password || !$confirm_password) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Both password fields are required.'
+            ]);
+            return;
+        }
+
+        if ($new_password !== $confirm_password) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Passwords do not match.'
+            ]);
+            return;
+        }
+
+        // Update the password in the database
+        if ($this->AuthModel->updatePassword($email, $new_password)) {
+            // Remove email from session after success
+            $this->session->unset_userdata('otp_email');
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Password reset successfully.'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to update password. Try again.'
+            ]);
+        }
+    }
+    // ------------------ SET NEW PASSSOWRD ENDS HERE ------------------ 
 }

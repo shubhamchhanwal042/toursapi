@@ -85,7 +85,7 @@ class MainModel extends CI_Model
         $config['smtp_host']   = 'smtp.gmail.com';
         $config['smtp_port']   = 587;
         $config['smtp_user']   = 'ganeshgodse1902@gmail.com'; // Your Gmail ID
-        $config['smtp_pass']   = 'ijny qqlh hojz vxhs'; // Your App Password
+        $config['smtp_pass']   = 'uhup ykml bmrv tvwb'; // Your App Password
         $config['smtp_crypto'] = 'tls'; // Use 'ssl' for port 465
         $config['mailtype']    = 'html';
         $config['charset']     = 'utf-8';
@@ -96,7 +96,7 @@ class MainModel extends CI_Model
         $this->load->library('email', $config);
 
         // Set email details
-        $this->email->from('ganeshgodse1902@gmail.com', 'Hari_Om_Dhaba');
+        $this->email->from('ganeshgodse1902@gmail.com', 'ToursAndTravels');
         $this->email->to($email);
         $this->email->subject('Password Reset OTP');
 
