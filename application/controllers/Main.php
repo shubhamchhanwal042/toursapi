@@ -7,6 +7,8 @@ class Main extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        $this->load->database();
+        $this->load->library('session');
         $this->load->model("MainModel");
         $this->MainModel->createAdmin();
     }
@@ -128,5 +130,90 @@ class Main extends CI_Controller
             ->set_content_type('application/json')
             ->set_status_header($exists ? 409 : 200)
             ->set_output(json_encode($response));
+    }
+
+
+    public function SendOtp()
+    {
+        $email = $this->input->get('email');
+
+        if (!$email) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Email is required'
+            ]);
+            return;
+        }
+
+        $otp = rand(1000, 9999); // Generate 4-digit OTP
+
+        // Store email in session (so user doesn't have to re-enter)
+        $this->session->set_userdata('otp_email', $email);
+
+        // Set the expiration time to 15 minutes from now
+        $expires_at = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+
+        // Save OTP in the database
+        $data = [
+            'email' => $email,
+            'otp' => $otp,
+            'created_at' => date('Y-m-d H:i:s'),
+            'expires_at' => $expires_at // Store expiration time
+        ];
+        $this->db->insert('otp_verification', $data);
+
+        // Send OTP via email
+        if ($this->MainModel->sendOtp($email, $otp)) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'OTP sent successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to send OTP. Please try again later.'
+            ]);
+        }
+    }
+
+
+
+    public function VerifyOtp()
+    {
+        $otp = $this->input->post('otp');
+        $email = $this->session->userdata('otp_email'); // Retrieve email from session
+
+        if (!$email) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Session expired. Please request OTP again.'
+            ]);
+            return;
+        }
+
+        // Fetch the latest OTP for this email from the database
+        $this->db->where('email', $email);
+        $this->db->where('expires_at >', date('Y-m-d H:i:s')); // Ensure OTP has not expired
+        $this->db->order_by('created_at', 'DESC'); // Get the latest OTP
+        $otpRecord = $this->db->get('otp_verification')->row();
+
+        if ($otpRecord && $otpRecord->otp == $otp) {
+            // OTP is correct, remove it from the database for security
+            $this->db->where('email', $email);
+            $this->db->delete('otp_verification');
+
+            // Remove email from session (to prevent reusing OTP)
+            $this->session->unset_userdata('otp_email');
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'OTP verified successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Invalid OTP or OTP expired'
+            ]);
+        }
     }
 }

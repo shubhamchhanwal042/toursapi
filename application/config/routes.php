@@ -172,11 +172,13 @@ $route['user/getpackage/(:any)'] = 'UserController/GetpackageByid/$1';
 $route['user/getallhotels'] = 'UserController/GetAllHotels';
 
 // -------------------------------------SINGUP CONTROLLER---------------------------------------
-$route['user/signup'] = 'Main/Signup';
+
 $route['AdminLogin'] = 'Main/AdminLogin';
 
 // Ganesh Routes
-$route['login'] = 'Main/Login'; 
+$route['login'] = 'Main/Login';
+$route['signup'] = 'Main/Signup';
+$route['sendOtp'] = 'Main/SendOtp';  
 $route['IsEmailAlreadyExists'] = 'Main/IsEmailAlreadyExists';
 
 // -------------------------------------------------BANNER ROUTES PACKAGES CONTROLLER--------------

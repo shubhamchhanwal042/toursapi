@@ -10,15 +10,14 @@ class PackagesController extends CI_Controller
         $this->load->library("session");
     }
 
-    public function AddPackages()
-    {
+    public function AddPackages() {
         $this->load->helper('file');
         $this->load->model('Packages_Api_Model');  // Load the model
 
         // Get all form data
-        $formdata = $this->input->post();
+        $formdata = $this->input->post();  
         // print_r($formdata);die;
-
+    
         // Handle hotel_image upload (single or multiple)
         if (!empty($_FILES['hotel_image']['name'][0])) {
             // Multiple files uploaded for hotel_image
@@ -72,7 +71,7 @@ class PackagesController extends CI_Controller
         if (!empty($formdata['spots']) && is_array($formdata['spots'])) {
             $formdata['spots'] = implode(',', $formdata['spots']);  // Convert array to comma-separated string
         }
-
+    
         // Call the model method to insert the data
         $inserted_id = $this->Packages_Api_Model->AddPackages($formdata);
 
@@ -97,8 +96,8 @@ class PackagesController extends CI_Controller
         // Return JSON response
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
-
-
+     
+    
 
 
     public function UpdatePackages($id)
@@ -2290,3 +2289,183 @@ class PackagesController extends CI_Controller
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 }
+
+
+// -------------------------------------------REMAINED-ADDING GET ALL BOOKING FUNCTION --------------------------
+
+function GetAllBusBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllBusBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "bus booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Bus booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllCabBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllCabBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Cab booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Cab booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllHotelBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllHotelBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Hotel booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Hotel booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function GetAllPackageBooking()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllPackageBooking();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Package booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Package booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+function ChangePackageBookingStatus($id,$status)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $Data = $this->Packages_Api_Model->ChangePackageBookingStatus($id,$status);
+        if ($Data==true) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $Data, "message" => "PackageBooking Status Updated Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Data Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+// -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
+function GetAllReviews()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $events = $this->Packages_Api_Model->GetAllReviews();
+        if ($events!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $events, "message" => "Reviews booking Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
+
+            $response = array("status" => "error", "message" => "No Reviews booking Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+
+function DelteReviewsByid($id){
+
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllReviewsyId($id);  // Assuming you have a method to get the package by ID
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DelteReviewsByid($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "AllReview Deleted Successfully");
+                } else {
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting AllReview");
+                }
+            } else {
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "AllReview Not Found");
+            }
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
+        }
+    
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    }
+}
+
+
+
+function ChangeReviewStatus($id,$status){
+// print_r($id);die;
+print_r($status);die;
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $formdata = $this->input->post();
+        // print_r($formdata);die;
+        $result = $this->Packages_Api_Model->ChangeReviewStatus($id,$status);
+        if($result == true){
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "message" => "Review Data Updated Successfully");
+        }else{
+            $this->output->set_status_header(500);
+            $response = array("status" => "error", "message" => "Some Error Occurred While Review account_status Data");
+        }
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
+
+}
+?>
