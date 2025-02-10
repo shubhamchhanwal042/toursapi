@@ -301,15 +301,28 @@ function AddHotel($formdata){
     }
 }
 
-function GetAllHotel()
+function GetAllHotel() 
 {
-    $this->db->order_by('id', 'DESC');
-    $data = $this->db->get_where("hotel")->result_array();
-    
-    if ($data != null) {
-        return $data;
+    $this->db->select("hotel.*, GROUP_CONCAT(hotel_activities.name) AS activities, GROUP_CONCAT(hotel_activities.icon) AS activity_icons");
+    $this->db->from("hotel");
+    $this->db->join("hotel_activities", "hotel.id = hotel_activities.hotel_id", "left");
+    $this->db->group_by("hotel.id");
+    $this->db->order_by("hotel.id", "DESC");
+
+    $query = $this->db->get();
+    $data = $query->result_array();
+
+    if (!empty($data)) {
+        foreach ($data as &$hotel) {
+            // Convert comma-separated activities into an array
+            $hotel['activities'] = !empty($hotel['activities']) ? explode(",", $hotel['activities']) : [];
+            $hotel['activity_icons'] = !empty($hotel['activity_icons']) ? explode(",", $hotel['activity_icons']) : [];
+        }
     }
+
+    return $data;
 }
+
 
 
 function UpdateHotel($id,$formdata){

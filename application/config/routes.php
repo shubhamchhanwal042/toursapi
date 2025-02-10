@@ -168,8 +168,9 @@ $route['user/getcab/(:any)'] = 'UserController/GetCabByid/$1';
 $route['user/addpackage'] = 'UserController/PackageBookings';
 $route['user/getpackage/(:any)'] = 'UserController/GetpackageByid/$1';
 
-// ------------------------------------------- Ganesh  (Get All Hotel) ROUTS-------------------------------------------------
+// ------------------------------------------- Ganesh   ROUTES-------------------------------------------------
 $route['user/getallhotels'] = 'UserController/GetAllHotels';
+$route['user/getallcabs'] = 'UserController/GetAllCabs';
 
 // -------------------------------------SINGUP CONTROLLER---------------------------------------
 

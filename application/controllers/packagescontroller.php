@@ -10,14 +10,15 @@ class PackagesController extends CI_Controller
         $this->load->library("session");
     }
 
-    public function AddPackages() {
+    public function AddPackages()
+    {
         $this->load->helper('file');
         $this->load->model('Packages_Api_Model');  // Load the model
 
         // Get all form data
-        $formdata = $this->input->post();  
+        $formdata = $this->input->post();
         // print_r($formdata);die;
-    
+
         // Handle hotel_image upload (single or multiple)
         if (!empty($_FILES['hotel_image']['name'][0])) {
             // Multiple files uploaded for hotel_image
@@ -71,7 +72,7 @@ class PackagesController extends CI_Controller
         if (!empty($formdata['spots']) && is_array($formdata['spots'])) {
             $formdata['spots'] = implode(',', $formdata['spots']);  // Convert array to comma-separated string
         }
-    
+
         // Call the model method to insert the data
         $inserted_id = $this->Packages_Api_Model->AddPackages($formdata);
 
@@ -96,8 +97,8 @@ class PackagesController extends CI_Controller
         // Return JSON response
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
-     
-    
+
+
 
 
     public function UpdatePackages($id)
@@ -337,35 +338,34 @@ class PackagesController extends CI_Controller
 
 
     function DeleteBooking($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllBookingsById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllBookingsById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteBooking($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Bookings Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Bookings");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteBooking($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Bookings Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Bookings Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Bookings");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Bookings Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
 
@@ -458,35 +458,34 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteInquires($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllInquires($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllInquires($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteInquires($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Inquires Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Inquires");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteInquires($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Inquires Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Inquires Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Inquires");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Inquires Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
 
@@ -585,35 +584,34 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteServices($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllServicesById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllServicesById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteServices($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Services Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Services");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteServices($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Services Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Services Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Services");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Services Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
     // -------------------------------------Currency API---------------------------------------------------
@@ -707,35 +705,34 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteCurrency($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllCurrencyById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllCurrencyById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteCurrency($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Currency Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Currency");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteCurrency($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Currency Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Currency Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Currency");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Currency Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
     // ----------------------------------------------- CLIENTS SIDE API ---------------------------------------
@@ -943,35 +940,34 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteBus($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllBusById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllBusById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteBus($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Bus Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Bus");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteBus($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Bus Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Bus Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Bus");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Bus Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
 
@@ -1174,36 +1170,36 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteCab($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllCabById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllCabById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteCab($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Cab Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Cab");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteCab($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Cab Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Cab Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Cab");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Cab Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
+
 
 
     // -----------------------------------------HOTEL APIS-------------------------------------------------
@@ -1408,35 +1404,34 @@ class PackagesController extends CI_Controller
     }
 
     function DeleteHotel($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllHotelById($id);  // Assuming you have a method to get the package by ID
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllHotelById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteHotel($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Hotel Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Hotel");
-                    }
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteHotel($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Hotel Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Hotel Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Hotel");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Hotel Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
 
@@ -1731,10 +1726,10 @@ class PackagesController extends CI_Controller
                     $_FILES['photos']['error'] = $files['error'][$i];
                     $_FILES['photos']['size'] = $files['size'][$i];
 
-                    // Perform the file upload for hotel images
+                    // Perform the file upload for Banner images
                     if (!$this->upload->do_upload('photos')) {
                         $error = $this->upload->display_errors();
-                        log_message('error', 'Hotel Image Upload Error: ' . $error);
+                        log_message('error', 'Banner Image Upload Error: ' . $error);
                         $response = array("status" => "error", "message" => "photos image upload error", "error" => $error);
                         $this->output->set_status_header(400);  // Bad Request
                         $this->output->set_content_type("application/json")->set_output(json_encode($response));
@@ -1761,12 +1756,12 @@ class PackagesController extends CI_Controller
 
                 if ($result) {
                     $this->output->set_status_header(200);  // Success
-                    $response = array("status" => "success", "message" => "Bus uploaded successfully", "data" => [
+                    $response = array("status" => "success", "message" => "Banner uploaded successfully", "data" => [
                         'photos' => $formdata['photos'],
                     ]);
                 } else {
                     $this->output->set_status_header(404);  // Not Found
-                    $response = array("status" => "error", "message" => "Error uploading Bus");
+                    $response = array("status" => "error", "message" => "Error uploading Banner");
                 }
             } else {
                 $this->output->set_status_header(400);  // Bad Request
@@ -1793,7 +1788,7 @@ class PackagesController extends CI_Controller
             } else {
                 $this->output->set_status_header(404);
 
-                $response = array("status" => "error", "message" => "No Bus Found");
+                $response = array("status" => "error", "message" => "No Banner Found");
             }
         } else {
             $this->output->set_status_header(405);
@@ -1899,7 +1894,7 @@ class PackagesController extends CI_Controller
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 
-    public function UpdateSingleBanner($id)
+    function UpdateSingleBanner($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Fetch the banner details by ID
@@ -1985,47 +1980,38 @@ class PackagesController extends CI_Controller
 
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
-    public function DeleteSingleImage($id)
+    function DeleteSingleImage($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Debug request method
             error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-
-            // Debug ID received
             error_log("Received ID: " . $id);
-            
+
             $id = (int)$id;
+
             // Fetch the banner details by ID
             $result = $this->Packages_Api_Model->GetAllBannerById($id);
-            // var_dump("id passed from client",$id);
-            // var_dump("result",$result);die;
-
-            // Debug result from database
             error_log("Database Result: " . print_r($result, true));
 
             if ($result != null) {
                 // Decode existing photos
                 $existing_photos = !empty($result['photos']) ? explode(',', $result['photos']) : [];
 
-                // Debug existing photos
                 error_log("Existing Photos: " . print_r($existing_photos, true));
 
                 // Get the image to be deleted from the request
                 $formdata = $this->input->post();
-
-                // Debug incoming form data
                 error_log("Form Data: " . print_r($formdata, true));
 
                 if (isset($formdata['delete_photo']) && !empty($formdata['delete_photo'])) {
                     $delete_photo = $formdata['delete_photo'];
                     error_log("Requested Image for Deletion: " . $delete_photo);
 
-                    // Find and delete the photo
+                    // Check if the image exists in the list
                     if (($key = array_search($delete_photo, $existing_photos)) !== false) {
-                        $config['upload_path'] = 'uploads/Packages/';
-                        $file_to_delete = $config['upload_path'] . $existing_photos[$key];
+                        // File path
+                        $file_to_delete = 'uploads/Packages/' . $existing_photos[$key];
 
-                        // Check if file exists before deleting
+                        // Delete the file from the server
                         if (file_exists($file_to_delete)) {
                             unlink($file_to_delete);
                             error_log("File deleted: " . $file_to_delete);
@@ -2036,11 +2022,12 @@ class PackagesController extends CI_Controller
                         // Remove the image from the array
                         unset($existing_photos[$key]);
 
-                        // Update photos in the database
-                        $formdata['photos'] = implode(',', $existing_photos);
-                        $update_result = $this->Packages_Api_Model->UpdateBanner($id, $formdata);
+                        // Rebuild the updated photo list
+                        $updated_photos = implode(',', $existing_photos);
 
-                        // Debug database update result
+                        // Update the `photos` column in the database
+                        $update_result = $this->Packages_Api_Model->UpdateBanner($id, ['photos' => $updated_photos]);
+
                         error_log("Database Update Result: " . print_r($update_result, true));
 
                         if ($update_result) {
@@ -2078,37 +2065,216 @@ class PackagesController extends CI_Controller
 
 
 
-    function DeleteBanner($id)
-    { {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // Check if the package exists before attempting to delete
-                $package = $this->Packages_Api_Model->GetAllBannerById($id);  // Assuming you have a method to get the package by ID
 
-                if ($package) {
-                    // If package exists, delete it
-                    $result = $this->Packages_Api_Model->DeleteBanner($id);
-                    if ($result) {
-                        $this->output->set_status_header(200);
-                        $response = array("status" => "success", "message" => "Banner Deleted Successfully");
-                    } else {
-                        $this->output->set_status_header(500);
-                        $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Banner");
-                    }
+    function DeleteBanner($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Check if the package exists before attempting to delete
+            $package = $this->Packages_Api_Model->GetAllBannerById($id);  // Assuming you have a method to get the package by ID
+
+            if ($package) {
+                // If package exists, delete it
+                $result = $this->Packages_Api_Model->DeleteBanner($id);
+                if ($result) {
+                    $this->output->set_status_header(200);
+                    $response = array("status" => "success", "message" => "Banner Deleted Successfully");
                 } else {
-                    // If package does not exist
-                    $this->output->set_status_header(404);
-                    $response = array("status" => "error", "message" => "Banner Not Found");
+                    $this->output->set_status_header(500);
+                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting Banner");
                 }
             } else {
-                // Invalid HTTP request method (only GET is allowed for deletion in this case)
-                $this->output->set_status_header(405);
-                $response = array("status" => "error", "message" => "Method Not Allowed");
+                // If package does not exist
+                $this->output->set_status_header(404);
+                $response = array("status" => "error", "message" => "Banner Not Found");
             }
-
-            // Send the response as JSON
-            $this->output->set_content_type("application/json")->set_output(json_encode($response));
+        } else {
+            // Invalid HTTP request method (only GET is allowed for deletion in this case)
+            $this->output->set_status_header(405);
+            $response = array("status" => "error", "message" => "Method Not Allowed");
         }
+
+        // Send the response as JSON
+        $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
+
+
+    // -------------------------------------------REMAINED-ADDING GET ALL BOOKING FUNCTION --------------------------
+
+    // function GetAllBusBooking()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $events = $this->Packages_Api_Model->GetAllBusBooking();
+    //         if ($events != null) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $events, "message" => "bus booking Fetched Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Bus booking Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+    // function GetAllCabBooking()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $events = $this->Packages_Api_Model->GetAllCabBooking();
+    //         if ($events != null) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $events, "message" => "Cab booking Fetched Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Cab booking Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+    // function GetAllHotelBooking()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $events = $this->Packages_Api_Model->GetAllHotelBooking();
+    //         if ($events != null) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $events, "message" => "Hotel booking Fetched Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Hotel booking Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+    // function GetAllPackageBooking()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $events = $this->Packages_Api_Model->GetAllPackageBooking();
+    //         // print_r($events);
+    //         if ($events != null) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $events, "message" => "Package booking Fetched Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Package booking Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+    // function ChangePackageBookingStatus($id, $status)
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $Data = $this->Packages_Api_Model->ChangePackageBookingStatus($id, $status);
+    //         if ($Data == true) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $Data, "message" => "PackageBooking Status Updated Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Data Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+    // -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
+    // function GetAllReviews()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         $events = $this->Packages_Api_Model->GetAllReviews();
+    //         if ($events != null) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "data" => $events, "message" => "Reviews booking Fetched Successfully");
+    //         } else {
+    //             $this->output->set_status_header(404);
+
+    //             $response = array("status" => "error", "message" => "No Reviews booking Found");
+    //         }
+    //     } else {
+    //         $this->output->set_status_header(405);
+
+    //         $response = array("status" => "error", "message" => "Bad Request");
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+
+    // function DelteReviewsByid($id)
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    //         // Check if the package exists before attempting to delete
+    //         $package = $this->Packages_Api_Model->GetAllReviewsyId($id);  // Assuming you have a method to get the package by ID
+    //         if ($package) {
+    //             // If package exists, delete it
+    //             $result = $this->Packages_Api_Model->DelteReviewsByid($id);
+    //             if ($result) {
+    //                 $this->output->set_status_header(200);
+    //                 $response = array("status" => "success", "message" => "AllReview Deleted Successfully");
+    //             } else {
+    //                 $this->output->set_status_header(500);
+    //                 $response = array("status" => "error", "message" => "Some Error Occurred While Deleting AllReview");
+    //             }
+    //         } else {
+    //             // If package does not exist
+    //             $this->output->set_status_header(404);
+    //             $response = array("status" => "error", "message" => "AllReview Not Found");
+    //         }
+    //     } else {
+    //         // Invalid HTTP request method (only GET is allowed for deletion in this case)
+    //         $this->output->set_status_header(405);
+    //         $response = array("status" => "error", "message" => "Method Not Allowed");
+    //     }
+
+    //     // Send the response as JSON
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
+
+
+    // function ChangeReviewStatus($id, $status)
+    // {
+    //     // print_r($id);die;
+    //     print_r($status);
+    //     die;
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $formdata = $this->input->post();
+    //         // print_r($formdata);die;
+    //         $result = $this->Packages_Api_Model->ChangeReviewStatus($id, $status);
+    //         if ($result == true) {
+    //             $this->output->set_status_header(200);
+    //             $response = array("status" => "success", "message" => "Review Data Updated Successfully");
+    //         } else {
+    //             $this->output->set_status_header(500);
+    //             $response = array("status" => "error", "message" => "Some Error Occurred While Review account_status Data");
+    //         }
+    //     }
+    //     $this->output->set_content_type("application/json")->set_output(json_encode($response));
+    // }
+
 
 
     // -------------------------------------------REMAINED-ADDING GET ALL BOOKING FUNCTION --------------------------
@@ -2177,7 +2343,6 @@ class PackagesController extends CI_Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $events = $this->Packages_Api_Model->GetAllPackageBooking();
-            // print_r($events);
             if ($events != null) {
                 $this->output->set_status_header(200);
                 $response = array("status" => "success", "data" => $events, "message" => "Package booking Fetched Successfully");
@@ -2272,8 +2437,7 @@ class PackagesController extends CI_Controller
     function ChangeReviewStatus($id, $status)
     {
         // print_r($id);die;
-        print_r($status);
-        die;
+        // print_r($status);die;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $formdata = $this->input->post();
             // print_r($formdata);die;
@@ -2289,183 +2453,3 @@ class PackagesController extends CI_Controller
         $this->output->set_content_type("application/json")->set_output(json_encode($response));
     }
 }
-
-
-// -------------------------------------------REMAINED-ADDING GET ALL BOOKING FUNCTION --------------------------
-
-function GetAllBusBooking()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->Packages_Api_Model->GetAllBusBooking();
-        if ($events!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "bus booking Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Bus booking Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-function GetAllCabBooking()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->Packages_Api_Model->GetAllCabBooking();
-        if ($events!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Cab booking Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Cab booking Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-function GetAllHotelBooking()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->Packages_Api_Model->GetAllHotelBooking();
-        if ($events!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Hotel booking Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Hotel booking Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-function GetAllPackageBooking()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->Packages_Api_Model->GetAllPackageBooking();
-        if ($events!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Package booking Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Package booking Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-function ChangePackageBookingStatus($id,$status)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $Data = $this->Packages_Api_Model->ChangePackageBookingStatus($id,$status);
-        if ($Data==true) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $Data, "message" => "PackageBooking Status Updated Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Data Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-// -------------------------------------------ADMIN SIDE GET REVIEWS --------------------------------
-function GetAllReviews()
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        $events = $this->Packages_Api_Model->GetAllReviews();
-        if ($events!=null) {
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "data" => $events, "message" => "Reviews booking Fetched Successfully");
-        } else {
-            $this->output->set_status_header(404);
-
-            $response = array("status" => "error", "message" => "No Reviews booking Found");
-        }
-    } else {
-        $this->output->set_status_header(405);
-
-        $response = array("status" => "error", "message" => "Bad Request");
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-
-function DelteReviewsByid($id){
-
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            // Check if the package exists before attempting to delete
-            $package = $this->Packages_Api_Model->GetAllReviewsyId($id);  // Assuming you have a method to get the package by ID
-            if ($package) {
-                // If package exists, delete it
-                $result = $this->Packages_Api_Model->DelteReviewsByid($id);
-                if ($result) {
-                    $this->output->set_status_header(200);
-                    $response = array("status" => "success", "message" => "AllReview Deleted Successfully");
-                } else {
-                    $this->output->set_status_header(500);
-                    $response = array("status" => "error", "message" => "Some Error Occurred While Deleting AllReview");
-                }
-            } else {
-                // If package does not exist
-                $this->output->set_status_header(404);
-                $response = array("status" => "error", "message" => "AllReview Not Found");
-            }
-        } else {
-            // Invalid HTTP request method (only GET is allowed for deletion in this case)
-            $this->output->set_status_header(405);
-            $response = array("status" => "error", "message" => "Method Not Allowed");
-        }
-    
-        // Send the response as JSON
-        $this->output->set_content_type("application/json")->set_output(json_encode($response));
-    }
-}
-
-
-
-function ChangeReviewStatus($id,$status){
-// print_r($id);die;
-print_r($status);die;
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $formdata = $this->input->post();
-        // print_r($formdata);die;
-        $result = $this->Packages_Api_Model->ChangeReviewStatus($id,$status);
-        if($result == true){
-            $this->output->set_status_header(200);
-            $response = array("status" => "success", "message" => "Review Data Updated Successfully");
-        }else{
-            $this->output->set_status_header(500);
-            $response = array("status" => "error", "message" => "Some Error Occurred While Review account_status Data");
-        }
-    }
-    $this->output->set_content_type("application/json")->set_output(json_encode($response));
-}
-
-}
-?>

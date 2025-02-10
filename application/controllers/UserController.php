@@ -315,7 +315,7 @@ public function GetAllHotels()
 
 
 // <!-------------- Get All Cabs ------------------->
-public function GetAllCab()
+public function GetAllCabs()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $result = $this->Packages_Api_Model->GetAllCab();
