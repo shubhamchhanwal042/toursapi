@@ -189,4 +189,13 @@ class UserModel extends CI_Model
         $this->db->insert('enquires',$formdata);
         return true;  
     }
+
+    // --------------------------- cab details------------------------------------
+    function CabDetail($id){
+// print_r($id);die;
+$data = $this->db->get_where("cab", array("id" => $id))->row_array();
+
+        return $data;
+    }
+
 }

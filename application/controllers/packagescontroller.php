@@ -1019,6 +1019,33 @@ class PackagesController extends CI_Controller
                 }
             }
 
+            if (!empty($_FILES['service_icons']['name'][0])) {
+                $files = $_FILES['service_icons']; // 'service_icons' is the key you send from Postman
+
+                for ($i = 0; $i < count($files['name']); $i++) {
+                    // Set the $_FILES global array for the current file
+                    $_FILES['service_icons']['name'] = $files['name'][$i];
+                    $_FILES['service_icons']['type'] = $files['type'][$i];
+                    $_FILES['service_icons']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['service_icons']['error'] = $files['error'][$i];
+                    $_FILES['service_icons']['size'] = $files['size'][$i];
+
+                    // Perform the file upload for service icons
+                    if (!$this->upload->do_upload('service_icons')) {
+                        $error = $this->upload->display_errors();
+                        log_message('error', 'Service Icon Upload Error: ' . $error);
+                        $response = array("status" => "error", "message" => "service_icons upload error", "error" => $error);
+                        $this->output->set_status_header(400);  // Bad Request
+                        $this->output->set_content_type("application/json")->set_output(json_encode($response));
+                        return;
+                    } else {
+                        // Service icon uploaded successfully
+                        $upload_data = $this->upload->data();
+                        $uploaded_Bus_files[] = $upload_data['file_name'];  // Add the file name to the array
+                    }
+                }
+            }
+
 
 
             // If files were uploaded successfully, save the data

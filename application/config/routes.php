@@ -97,6 +97,7 @@ $route['admin/updatecurrency/(:num)'] = 'PackagesController/UpdateCurrency/$1';
 $route['admin/getcurrencybyid/(:num)'] = 'PackagesController/GetAllCurrencyById/$1';
 $route['admin/deletecurrency/(:num)'] = 'PackagesController/DeleteCurrency/$1';
 
+
 // ---------------------------BUS SECTION -------------------------------------
 $route['admin/addbus'] = 'PackagesController/AddBus';
 $route['admin/getbus'] = 'PackagesController/GetAllBus';

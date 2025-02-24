@@ -338,7 +338,26 @@ public function GetAllCabs()
 
 
 
+// ---------------------------------------CAB DETAILS-----------------------------------------------
+function CabDetail($id) {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $cab = $this->UserModel->CabDetail($id);
+        // print_r($cab);die;
+        if ($cab!=null) {
+            $this->output->set_status_header(200);
+            $response = array("status" => "success", "data" => $cab, "message" => "CabDetail Fetched Successfully");
+        } else {
+            $this->output->set_status_header(404);
 
+            $response = array("status" => "error", "message" => "No CabDetail Found");
+        }
+    } else {
+        $this->output->set_status_header(405);
+
+        $response = array("status" => "error", "message" => "Bad Request");
+    }
+    $this->output->set_content_type("application/json")->set_output(json_encode($response));
+}
 
 }
 ?>
